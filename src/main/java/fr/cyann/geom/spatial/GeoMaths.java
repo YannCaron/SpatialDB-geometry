@@ -5,7 +5,8 @@ package fr.cyann.geom.spatial;
  */
 public class GeoMaths {
 
-	public static final double METER_TO_FEET_RATIO = 3.28084;
+	public static final double METER_TO_FEET_RATIO = 3.28084d;
+	public static final double DEGREE_TO_METER_RATIO = 111319.46d;
 
 	private GeoMaths() {
 		throw new RuntimeException("Cannot instantiate static class !");
@@ -17,6 +18,10 @@ public class GeoMaths {
 
 	public static double meterToFeet(double meter) {
 		return meter * METER_TO_FEET_RATIO;
+	}
+
+	public static double meterToDegree(double meter) {
+		return meter / DEGREE_TO_METER_RATIO;
 	}
 
 }
