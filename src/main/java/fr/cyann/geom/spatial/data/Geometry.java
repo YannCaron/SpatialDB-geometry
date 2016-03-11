@@ -25,9 +25,9 @@ public abstract class Geometry<C extends XY> implements Marshallable {
 	}
 
 	static Class<? extends XY> getCoordType(StringBuilder stringBuilder, String prefix) {
-		if (Parse.consumeSymbol(stringBuilder, prefix + "ZM")) return XYZM.class;
-		else if (Parse.consumeSymbol(stringBuilder, prefix + "M")) return XYM.class;
-		else if (Parse.consumeSymbol(stringBuilder, prefix + "Z")) return XYZ.class;
+		if (Parse.consumeSymbol(stringBuilder, prefix + "ZM") || Parse.consumeSymbol(stringBuilder, prefix + " ZM")) return XYZM.class;
+		else if (Parse.consumeSymbol(stringBuilder, prefix + "M") || Parse.consumeSymbol(stringBuilder, prefix + " M")) return XYM.class;
+		else if (Parse.consumeSymbol(stringBuilder, prefix + "Z") || Parse.consumeSymbol(stringBuilder, prefix + " Z")) return XYZ.class;
 		else if (Parse.consumeSymbol(stringBuilder, prefix)) return XY.class;
 		else return null;
 	}

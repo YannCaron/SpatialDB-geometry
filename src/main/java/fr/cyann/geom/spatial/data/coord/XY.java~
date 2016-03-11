@@ -23,11 +23,11 @@ public class XY implements Marshallable {
 
     public static XY unMarshall(StringBuilder string) {
         Parse.removeBlanks(string);
-	    Double x = Parse.consumeDouble(string);
-	    if (x == null) return null;
+        Double x = Parse.consumeDouble(string);
+        if (x == null) return null;
         Parse.removeBlanks(string);
-	    Double y = Parse.consumeDouble(string);
-	    if (y == null) return null;
+        Double y = Parse.consumeDouble(string);
+        if (y == null) return null;
         return new XY(x, y);
     }
 
@@ -70,10 +70,10 @@ public class XY implements Marshallable {
     }
 
     @Override
-    public void marshall(StringBuilder stringBuilder) {
-        marshallNumber(stringBuilder, x);
-        stringBuilder.append(' ');
-        marshallNumber(stringBuilder, y);
+    public void marshall(StringBuilder string) {
+        marshallNumber(string, x);
+        string.append(' ');
+        marshallNumber(string, y);
     }
 
 }

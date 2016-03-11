@@ -20,17 +20,25 @@ public class XYZM extends XYZ {
 	}
 
 	public static XYZM unMarshall(StringBuilder string) {
-		XYZ xyz = XYZ.unMarshall(string);
+		Parse.removeBlanks(string);
+		Double x = Parse.consumeDouble(string);
+		if (x == null) return null;
+		Parse.removeBlanks(string);
+		Double y = Parse.consumeDouble(string);
+		if (y == null) return null;
+		Parse.removeBlanks(string);
+		Double z = Parse.consumeDouble(string);
+		if (z == null) return null;
 		Parse.removeBlanks(string);
 		Double m = Parse.consumeDouble(string);
 		if (m == null) return null;
-		return new XYZM(xyz.getX(), xyz.getY(), xyz.getZ(), m);
+		return new XYZM(x, y, z, m);
 	}
 
 	@Override
-	public void marshall(StringBuilder stringBuilder) {
-		super.marshall(stringBuilder);
-		stringBuilder.append(' ');
-		marshallNumber(stringBuilder, m);
+	public void marshall(StringBuilder string) {
+		super.marshall(string);
+		string.append(' ');
+		marshallNumber(string, m);
 	}
 }

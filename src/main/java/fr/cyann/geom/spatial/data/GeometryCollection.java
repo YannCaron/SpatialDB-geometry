@@ -1,6 +1,9 @@
 package fr.cyann.geom.spatial.data;
 
 import fr.cyann.geom.spatial.data.coord.XY;
+import fr.cyann.geom.spatial.data.coord.XYM;
+import fr.cyann.geom.spatial.data.coord.XYZ;
+import fr.cyann.geom.spatial.data.coord.XYZM;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -22,18 +25,18 @@ public class GeometryCollection extends Geometry {
     }
 
     @Override
-    public void marshall(StringBuilder string) throws BadGeometryException {
-        string.append("GEOMETRYCOLLECTION ");
-        string.append("(");
+    public void marshall(StringBuilder stringBuilder) throws BadGeometryException {
+        stringBuilder.append("GEOMETRYCOLLECTION ");
+        stringBuilder.append("(");
 
         boolean tail = false;
         for (Geometry geometry : geometries) {
-            if (tail) string.append(", ");
-            geometry.marshall(string);
+            if (tail) stringBuilder.append(", ");
+            geometry.marshall(stringBuilder);
             tail = true;
         }
 
-        string.append(")");
+        stringBuilder.append(")");
     }
 
     public static GeometryCollection unMarshall(String string) {
@@ -61,11 +64,37 @@ public class GeometryCollection extends Geometry {
             Geometry geometry;
             geometry = GeometryCollection.unMarshall(string);
             if (geometry == null)
-                geometry = Point.unMarshall(string);
+                geometry = Point.unMarshall(XY.class, string);
+	        if (geometry == null)
+		        geometry = Point.unMarshall(XYZ.class, string);
+	        if (geometry == null)
+		        geometry = Point.unMarshall(XYM.class, string);
+	        if (geometry == null)
+		        geometry = Point.unMarshall(XYZM.class, string);
             if (geometry == null)
-                geometry = LineString.unMarshall(string);
+                geometry = LineString.unMarshall(XY.class, string);
+	        if (geometry == null)
+		        geometry = LineString.unMarshall(XYZ.class, string);
+	        if (geometry == null)
+		        geometry = LineString.unMarshall(XYM.class, string);
+	        if (geometry == null)
+		        geometry = LineString.unMarshall(XYZM.class, string);
             if (geometry == null)
-                geometry = Polygon.unMarshall(string);
+                geometry = Polygon.unMarshall(XY.class, string);
+	        if (geometry == null)
+		        geometry = Polygon.unMarshall(XYZ.class, string);
+	        if (geometry == null)
+		        geometry = Polygon.unMarshall(XYM.class, string);
+	        if (geometry == null)
+		        geometry = Polygon.unMarshall(XYZM.class, string);
+	        if (geometry == null)
+		        geometry = PolyhedralSurface.unMarshall(XY.class, string);
+	        if (geometry == null)
+		        geometry = PolyhedralSurface.unMarshall(XYZ.class, string);
+	        if (geometry == null)
+		        geometry = PolyhedralSurface.unMarshall(XYM.class, string);
+	        if (geometry == null)
+		        geometry = PolyhedralSurface.unMarshall(XYZM.class, string);
             if (geometry == null) return null;
             geometryCollection.addGeometry(geometry);
 

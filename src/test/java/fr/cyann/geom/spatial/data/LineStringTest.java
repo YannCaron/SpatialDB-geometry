@@ -37,10 +37,10 @@ public class LineStringTest extends TestCase {
 		LineString<XYM> pt3 = new LineString<XYM>(XYM.class).addCoordinate(new XYM(10, 20, 3)).addCoordinate(new XYM(20, 20, 3));
 		LineString<XYZM> pt4 = new LineString<XYZM>(XYZM.class).addCoordinate(new XYZM(10, 20, 30, 3)).addCoordinate(new XYZM(20, 20, 30, 3));
 
-		assertEquals(pt1, LineString.unMarshall("LINESTRING (10 20, 20 20)"));
-		assertEquals(pt2, LineString.unMarshall("LINESTRINGZ (10 20 30, 20 20 30)"));
-		assertEquals(pt3, LineString.unMarshall("LINESTRINGM (10 20 3, 20 20 3)"));
-		assertEquals(pt4, LineString.unMarshall("LINESTRINGZM (10 20 30 3, 20 20 30 3)"));
+		assertEquals(pt1, LineString.unMarshall(XY.class, "LINESTRING (10 20, 20 20)"));
+		assertEquals(pt2, LineString.unMarshall(XYZ.class, "LINESTRING Z (10 20 30, 20 20 30)"));
+		assertEquals(pt3, LineString.unMarshall(XYM.class, "LINESTRING M (10 20 3, 20 20 3)"));
+		assertEquals(pt4, LineString.unMarshall(XYZM.class, "LINESTRING ZM (10 20 30 3, 20 20 30 3)"));
 
 	}
 }

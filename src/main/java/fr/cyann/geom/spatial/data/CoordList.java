@@ -11,12 +11,13 @@ import fr.cyann.geom.spatial.data.coord.XY;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 /**
  * The ch.skyguide.geos.loader.geom.CoordList definition.
  */
-public class CoordList<C extends XY> implements Marshallable {
+public class CoordList<C extends XY> implements Marshallable, Iterable<C> {
 
     // attribute
     private final List<C> coords;
@@ -28,7 +29,33 @@ public class CoordList<C extends XY> implements Marshallable {
         this.isClosed = closed;
     }
 
-    public static <C extends XY> CoordList<C> unMarshall(Class<C> type, StringBuilder stringBuilder, boolean closed) {
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		CoordList<?> that = (CoordList<?>) o;
+
+		if (isClosed != that.isClosed) return false;
+
+		if (coords == null && that.coords != null) return false;
+		if (coords.size() != that.coords.size()) return false;
+
+		for (int i = 0; i < coords.size(); i++) {
+			if (!coords.get(i).equals(that.coords.get(i))) return false;
+		}
+
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = coords.hashCode();
+		result = 31 * result + (isClosed ? 1 : 0);
+		return result;
+	}
+
+	public static <C extends XY> CoordList<C> unMarshall(Class<C> type, StringBuilder stringBuilder, boolean closed) {
 
         // '('
         Parse.removeBlanks(stringBuilder);
@@ -56,25 +83,6 @@ public class CoordList<C extends XY> implements Marshallable {
         return list;
     }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-
-		CoordList<?> coordList = (CoordList<?>) o;
-
-		if (isClosed != coordList.isClosed) return false;
-		return !(coords != null ? !coords.equals(coordList.coords) : coordList.coords != null);
-
-	}
-
-	@Override
-	public int hashCode() {
-		int result = coords != null ? coords.hashCode() : 0;
-		result = 31 * result + (isClosed ? 1 : 0);
-		return result;
-	}
-
 	// accessor
     public List<C> getCoords() {
         return coords;
@@ -85,8 +93,9 @@ public class CoordList<C extends XY> implements Marshallable {
     }
 
     // method
-    public boolean add(C xy) {
-        return coords.add(xy);
+    public CoordList<C> add(C xy) {
+        coords.add(xy);
+	    return this;
     }
 
     public boolean removeAll(Collection<?> c) {
@@ -95,22 +104,32 @@ public class CoordList<C extends XY> implements Marshallable {
 
     // method implement
     @Override
-    public void marshall(StringBuilder string) {
-        string.append('(');
+    public void marshall(StringBuilder stringBuilder) {
+        stringBuilder.append('(');
         boolean tail = false;
         for (C coord : coords) {
             if (tail) {
-                string.append(", ");
+                stringBuilder.append(", ");
             }
             tail = true;
 
-            coord.marshall(string);
+            coord.marshall(stringBuilder);
         }
 
         if (isClosed && coords.size() > 0 && !coords.get(0).equals(coords.get(coords.size() - 1))) {
-            string.append(", ");
-            coords.get(0).marshall(string);
+            stringBuilder.append(", ");
+            coords.get(0).marshall(stringBuilder);
         }
-        string.append(')');
+        stringBuilder.append(')');
     }
+
+	/**
+	 * Returns an iterator over elements of type {@code T}.
+	 *
+	 * @return an Iterator.
+	 */
+	@Override
+	public Iterator<C> iterator() {
+		return coords.iterator();
+	}
 }

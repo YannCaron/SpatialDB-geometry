@@ -15,51 +15,51 @@ import java.util.List;
 /**
  * The ch.skyguide.geos.loader.geom.LineString definition.
  */
-public class Polygon<C extends XY> extends LineString {
+public class Polygon<C extends XY> extends Geometry {
 
+	private final CoordList<C> exterior;
     private final List<CoordList<C>> interiors;
 
     public Polygon(Class<C> type) {
-        super(type, true);
-        this.interiors = new ArrayList<>();
+        this(type, new CoordList<C>(true));
     }
 
     Polygon(Class<C> type, CoordList<C> exterior) {
-        super(type, exterior);
+        super(type);
+	    this.exterior = exterior;
         this.interiors = new ArrayList<>();
     }
 
-    public static Polygon<? extends XY> unMarshall(String stringBuilder) {
-        if (stringBuilder == null) return null;
-        return unMarshall(new StringBuilder(stringBuilder));
-    }
+	public static <C extends XY>Polygon<C> unMarshall(Class<C> type, String string) {
+		if (string == null) return null;
+		return unMarshall(type, new StringBuilder(string));
+	}
 
-    public static Polygon<? extends XY> unMarshall(StringBuilder stringBuilder) {
+	public static <C extends XY>Polygon<C> unMarshall(Class<C> type, StringBuilder stringBuilder) {
 
         // 'POLYGON'
         Parse.removeBlanks(stringBuilder);
-	    Class<? extends XY> type = getCoordType(stringBuilder, "LINESTRING");
-	    if (type == null) return null;
+	    Class<? extends XY> parsedType = getCoordType(stringBuilder, "POLYGON");
+		if (type == null || !type.equals(parsedType)) return null;
 
         // '('
         Parse.removeBlanks(stringBuilder);
         if (!Parse.consumeSymbol(stringBuilder, "(")) return null;
 
         // <exterior>
-	    CoordList<? extends XY> exterior = CoordList.unMarshall(type, stringBuilder, true);
+	    CoordList<C> exterior = CoordList.unMarshall(type, stringBuilder, true);
 	    if (exterior == null) return null;
 
-        Polygon<? extends XY> polygon = new Polygon(type, exterior);
+        Polygon<C> polygon = new Polygon(type, exterior);
 
         // <interior>*
         while (stringBuilder.length() > 0 && Parse.nextSymbol(stringBuilder, ",")) {
 
             // ','
-            Parse.removeBlanks(stringBuilder);
             Parse.consumeSymbol(stringBuilder, ",");
+	        Parse.removeBlanks(stringBuilder);
 
             // <interior>
-            Parse.removeBlanks(stringBuilder);
 	        CoordList interior = CoordList.unMarshall(type, stringBuilder, true);
 	        if (interior == null) return null;
             polygon.addInterior(interior);
@@ -78,19 +78,20 @@ public class Polygon<C extends XY> extends LineString {
     }
 
     @Override
-    public void marshall(StringBuilder string) throws BadGeometryException {
-        string.append("POLYGON");
-        string.append(' ');
-        string.append('(');
+    public void marshall(StringBuilder stringBuilder) throws BadGeometryException {
+        stringBuilder.append("POLYGON");
+	    appendType(stringBuilder);
+        stringBuilder.append(' ');
+        stringBuilder.append('(');
 
         //if (getCoordinate().size() < 4) throw new BadGeometryException("POLYGON geometry should hava at least 4 coordinates!");
-        getCoordinate().marshall(string);
+	    exterior.marshall(stringBuilder);
 
         for (CoordList interior : interiors) {
-            string.append(", ");
-            interior.marshall(string);
+            stringBuilder.append(", ");
+            interior.marshall(stringBuilder);
         }
 
-        string.append(')');
+        stringBuilder.append(')');
     }
 }

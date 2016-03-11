@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="fr.cyann.geom.spatial.data.PolyhedralSurfaceTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2016-03-11T10:06:11" hostname="cyann" time="0.007">
+  <properties/>
+  <testcase name="testMarshall" classname="fr.cyann.geom.spatial.data.PolyhedralSurfaceTest" time="0.007"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -45,7 +45,7 @@ public class LineString<C extends XY> extends Geometry {
 		return coordinate != null ? coordinate.hashCode() : 0;
 	}
 
-	public CoordList getCoordinate() {
+	public CoordList<C> getCoordinate() {
 		return coordinate;
 	}
 
@@ -62,22 +62,22 @@ public class LineString<C extends XY> extends Geometry {
 		coordinate.marshall(stringBuilder);
 	}
 
-    public static LineString<? extends XY> unMarshall(String string) {
+    public static <C extends XY>LineString<C> unMarshall(Class<C> type, String string) {
         if (string == null) return null;
-        return unMarshall(new StringBuilder(string));
+        return unMarshall(type, new StringBuilder(string));
     }
 
-    public static LineString<? extends XY> unMarshall(StringBuilder stringBuilder) {
+    public static <C extends XY>LineString<C> unMarshall(Class<C> type, StringBuilder stringBuilder) {
 
 	    // LINESTRING
 	    Parse.removeBlanks(stringBuilder);
-	    Class<? extends XY> type = getCoordType(stringBuilder, "LINESTRING");
-	    if (type == null) return null;
+	    Class<? extends XY> parsedType = getCoordType(stringBuilder, "LINESTRING");
+	    if (type == null || !type.equals(parsedType)) return null;
 
-        CoordList<? extends XY> list = CoordList.unMarshall(type, stringBuilder, false);
+        CoordList<C> list = CoordList.unMarshall(type, stringBuilder, false);
 	    if (list == null) return null;
 
-        return new LineString(type, list);
+        return new LineString<C>(type, list);
     }
 
 

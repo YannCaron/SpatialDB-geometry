@@ -66,16 +66,16 @@ public class Point<C extends XY> extends Geometry {
 		stringBuilder.append(')');
 	}
 
-	public static Point<? extends XY> unMarshall(String string) {
+	public static <C extends XY>Point<C> unMarshall(Class<C> type, String string) {
 		if (string == null) return null;
-		return unMarshall(new StringBuilder(string));
+		return unMarshall(type, new StringBuilder(string));
 	}
 
-	public static Point<? extends XY> unMarshall(StringBuilder stringBuilder) {
+	public static <C extends XY>Point<C> unMarshall(Class<C> type, StringBuilder stringBuilder) {
 		Parse.removeBlanks(stringBuilder);
 
-		Class<? extends XY> type = getCoordType(stringBuilder, "POINT");
-		if (type == null) return null;
+		Class<? extends XY> parsedType = getCoordType(stringBuilder, "POINT");
+		if (type == null || !type.equals(parsedType)) return null;
 
 		Parse.removeBlanks(stringBuilder);
 		if (!Parse.consumeSymbol(stringBuilder, "(")) return null;

@@ -38,10 +38,10 @@ public class PointTest extends TestCase {
 		Point<XYM> pt3 = Point.newPointM(10, 20, 3);
 		Point<XYZM> pt4 = Point.newPointZM(10, 20, 30, 3);
 
-		assertEquals(pt1, Point.unMarshall("POINT (10 20)"));
-		assertEquals(pt2, Point.unMarshall("POINTZ (10 20 30)"));
-		assertEquals(pt3, Point.unMarshall("POINTM (10 20 3)"));
-		assertEquals(pt4, Point.unMarshall("POINTZM (10 20 30 3)"));
+		assertEquals(pt1, Point.unMarshall(XY.class, "POINT (10 20)"));
+		assertEquals(pt2, Point.unMarshall(XYZ.class, "POINTZ (10 20 30)"));
+		assertEquals(pt3, Point.unMarshall(XYM.class, "POINTM (10 20 3)"));
+		assertEquals(pt4, Point.unMarshall(XYZM.class, "POINTZM (10 20 30 3)"));
 	}
 
 }

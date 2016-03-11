@@ -26,18 +26,22 @@ public class XYZ extends XY {
 	}
 
 	public static XYZ unMarshall(StringBuilder string) {
-		XY xy = XY.unMarshall(string);
 		Marshallable.Parse.removeBlanks(string);
-
+		Double y = Marshallable.Parse.consumeDouble(string);
+		if (y == null) return null;
+		Marshallable.Parse.removeBlanks(string);
+		Double x = Marshallable.Parse.consumeDouble(string);
+		if (x == null) return null;
+		Marshallable.Parse.removeBlanks(string);
 		Double z = Marshallable.Parse.consumeDouble(string);
 		if (z == null) return null;
-		return new XYZ(xy.getX(), xy.getY(), z);
+		return new XYZ(x, y, z);
 	}
 
 	@Override
-	public void marshall(StringBuilder stringBuilder) {
-		super.marshall(stringBuilder);
-		stringBuilder.append(' ');
-		marshallNumber(stringBuilder, z);
+	public void marshall(StringBuilder string) {
+		super.marshall(string);
+		string.append(' ');
+		marshallNumber(string, z);
 	}
 }

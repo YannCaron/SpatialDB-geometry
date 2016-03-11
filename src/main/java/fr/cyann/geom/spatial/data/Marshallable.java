@@ -38,7 +38,7 @@ public interface Marshallable {
 			StringBuilder numString = new StringBuilder();
 			while (string.length() > 0) {
 				String chr = String.valueOf(string.charAt(0));
-				if (!"0123456789.".contains(chr)) break;
+				if (!"-0123456789.".contains(chr)) break;
 				numString.append(chr);
 				string.deleteCharAt(0);
 			}
@@ -69,10 +69,10 @@ public interface Marshallable {
 	}
 
 	/**
-	 * The abstract method that transform Geometry structure into string understandable by GeomFromText() spatialite function.
+	 * The abstract method that transform Geometry structure into stringBuilder understandable by GeomFromText() spatialite function.
 	 * see at http://www.gaia-gis.it/gaia-sins/spatialite-cookbook/html/wkt-wkb.html
-	 * @param string
+	 * @param stringBuilder
 	 */
-	void marshall(StringBuilder string) throws BadGeometryException;
+	void marshall(StringBuilder stringBuilder) throws BadGeometryException;
 
 }

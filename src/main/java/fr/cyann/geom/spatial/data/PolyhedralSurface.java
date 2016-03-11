@@ -17,26 +17,113 @@ import java.util.List;
  */
 public class PolyhedralSurface<C extends XY> extends Geometry<XY> {
 
-	private final List<CoordList<C>> faces;
+	private final List<NormalGroup<C>> groups;
 
 	public PolyhedralSurface(Class<XY> type) {
 		super(type);
-		faces = new ArrayList<>();
+		groups = new ArrayList<>();
 	}
 
-	public CoordList<C> addFace(CoordList<C> face) {
-		faces.add(face);
-		return face;
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		PolyhedralSurface<?> that = (PolyhedralSurface<?>) o;
+
+		if (groups == null && that.groups != null) return false;
+		if (groups.size() != that.groups.size()) return false;
+
+		for (int i = 0; i < groups.size(); i++) {
+			if (!groups.get(i).equals(that.groups.get(i))) return false;
+		}
+
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		return groups != null ? groups.hashCode() : 0;
+	}
+
+	public NormalGroup<C> createGroup() {
+		NormalGroup<C> normalGroup = new NormalGroup<>();
+		groups.add(normalGroup);
+		return normalGroup;
+	}
+
+	void addFaceNormalGroup(NormalGroup group) {
+		groups.add(group);
+	}
+
+	public List<NormalGroup<C>> getNormalGroups() {
+		return groups;
+	}
+
+	public static <C extends XY>PolyhedralSurface<C> unMarshall(Class<C> type, String stringBuilder) {
+		if (stringBuilder == null) return null;
+		return unMarshall(type, new StringBuilder(stringBuilder));
+	}
+
+	public static <C extends XY>PolyhedralSurface<C> unMarshall(Class<C> type, StringBuilder stringBuilder) {
+
+		// 'POLYGON'
+		Parse.removeBlanks(stringBuilder);
+		Class<? extends XY> parsedType = getCoordType(stringBuilder, "POLYHEDRALSURFACE");
+		if (type == null || !type.equals(parsedType)) return null;
+
+		// '('
+		Parse.removeBlanks(stringBuilder);
+		if (!Parse.consumeSymbol(stringBuilder, "(")) return null;
+
+		PolyhedralSurface<C> polyhedralSurface = new PolyhedralSurface(type);
+
+		// <interior>*
+		boolean first = true;
+		Parse.removeBlanks(stringBuilder);
+		while (stringBuilder.length() > 0 && (first || Parse.nextSymbol(stringBuilder, ","))) {
+
+			if (!first) {
+				// ','
+				Parse.consumeSymbol(stringBuilder, ",");
+			}
+			first = false;
+
+			NormalGroup<C> normalGroup = NormalGroup.unMarshall(type, stringBuilder);
+			polyhedralSurface.addFaceNormalGroup(normalGroup);
+
+			Parse.removeBlanks(stringBuilder);
+		}
+
+		// ')'
+		Parse.removeBlanks(stringBuilder);
+		if (!Parse.consumeSymbol(stringBuilder, ")")) return null;
+
+		return polyhedralSurface;
 	}
 
 	/**
 	 * The abstract method that transform Geometry structure into string understandable by GeomFromText() spatialite function.
 	 * see at http://www.gaia-gis.it/gaia-sins/spatialite-cookbook/html/wkt-wkb.html
 	 *
-	 * @param string
+	 * @param stringBuilder
 	 */
 	@Override
-	public void marshall(StringBuilder string) throws BadGeometryException {
+	public void marshall(StringBuilder stringBuilder) throws BadGeometryException {
+		stringBuilder.append("POLYHEDRALSURFACE");
+		appendType(stringBuilder);
+		stringBuilder.append(' ');
+		stringBuilder.append('(');
 
+		boolean first = true;
+		for (NormalGroup<C> normalGroup : groups) {
+			if (!first) stringBuilder.append(", ");
+			first = false;
+
+			normalGroup.marshall(stringBuilder);
+
+		}
+
+		stringBuilder.append(')');
 	}
 }
