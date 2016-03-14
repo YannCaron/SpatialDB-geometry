@@ -73,9 +73,19 @@ public class Polygon<C extends XY> extends Geometry {
         return polygon;
     }
 
-    public boolean addInterior(CoordList<C> xyList) {
-        return interiors.add(xyList);
+	public void addExteriorCoordinate(C coord) {
+		exterior.add(coord);
+	}
+
+    void addInterior(CoordList<C> xyList) {
+        interiors.add(xyList);
     }
+
+	public CoordList<C> createAndAddInterion() {
+		CoordList<C> exterior = new CoordList<>(true);
+		interiors.add(exterior);
+		return exterior;
+	}
 
     @Override
     public void marshall(StringBuilder stringBuilder) throws BadGeometryException {

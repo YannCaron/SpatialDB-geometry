@@ -18,10 +18,10 @@ public class LineStringTest extends TestCase {
 
 	public void testMarshall() throws Exception {
 
-		LineString<XY> pt1 = new LineString<XY>(XY.class).addCoordinate(new XY(10, 20)).addCoordinate(new XY(20, 20));
-		LineString<XYZ> pt2 = new LineString<XYZ>(XYZ.class).addCoordinate(new XYZ(10, 20, 30)).addCoordinate(new XYZ(20, 20, 30));
-		LineString<XYM> pt3 = new LineString<XYM>(XYM.class).addCoordinate(new XYM(10, 20, 3)).addCoordinate(new XYM(20, 20, 3));
-		LineString<XYZM> pt4 = new LineString<XYZM>(XYZM.class).addCoordinate(new XYZM(10, 20, 30, 3)).addCoordinate(new XYZM(20, 20, 30, 3));
+		LineString<XY> pt1 = new LineString<XY>(XY.class).addToCoordinate(new XY(10, 20)).addToCoordinate(new XY(20, 20));
+		LineString<XYZ> pt2 = new LineString<XYZ>(XYZ.class).addToCoordinate(new XYZ(10, 20, 30)).addToCoordinate(new XYZ(20, 20, 30));
+		LineString<XYM> pt3 = new LineString<XYM>(XYM.class).addToCoordinate(new XYM(10, 20, 3)).addToCoordinate(new XYM(20, 20, 3));
+		LineString<XYZM> pt4 = new LineString<XYZM>(XYZM.class).addToCoordinate(new XYZM(10, 20, 30, 3)).addToCoordinate(new XYZM(20, 20, 30, 3));
 
 		assertEquals("LINESTRING (10 20, 20 20)", pt1.toString());
 		assertEquals("LINESTRINGZ (10 20 30, 20 20 30)", pt2.toString());
@@ -32,10 +32,10 @@ public class LineStringTest extends TestCase {
 
 	public void testUnMarshall() throws Exception {
 
-		LineString<XY> pt1 = new LineString<XY>(XY.class).addCoordinate(new XY(10, 20)).addCoordinate(new XY(20, 20));
-		LineString<XYZ> pt2 = new LineString<XYZ>(XYZ.class).addCoordinate(new XYZ(10, 20, 30)).addCoordinate(new XYZ(20, 20, 30));
-		LineString<XYM> pt3 = new LineString<XYM>(XYM.class).addCoordinate(new XYM(10, 20, 3)).addCoordinate(new XYM(20, 20, 3));
-		LineString<XYZM> pt4 = new LineString<XYZM>(XYZM.class).addCoordinate(new XYZM(10, 20, 30, 3)).addCoordinate(new XYZM(20, 20, 30, 3));
+		LineString<XY> pt1 = new LineString<XY>(XY.class).addToCoordinate(new XY(10, 20)).addToCoordinate(new XY(20, 20));
+		LineString<XYZ> pt2 = new LineString<XYZ>(XYZ.class).addToCoordinate(new XYZ(10, 20, 30)).addToCoordinate(new XYZ(20, 20, 30));
+		LineString<XYM> pt3 = new LineString<XYM>(XYM.class).addToCoordinate(new XYM(10, 20, 3)).addToCoordinate(new XYM(20, 20, 3));
+		LineString<XYZM> pt4 = new LineString<XYZM>(XYZM.class).addToCoordinate(new XYZM(10, 20, 30, 3)).addToCoordinate(new XYZM(20, 20, 30, 3));
 
 		assertEquals(pt1, LineString.unMarshall(XY.class, "LINESTRING (10 20, 20 20)"));
 		assertEquals(pt2, LineString.unMarshall(XYZ.class, "LINESTRING Z (10 20 30, 20 20 30)"));

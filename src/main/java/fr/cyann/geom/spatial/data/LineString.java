@@ -49,7 +49,7 @@ public class LineString<C extends XY> extends Geometry {
 		return coordinate;
 	}
 
-	public LineString<C> addCoordinate(C coordinate) {
+	public LineString<C> addToCoordinate(C coordinate) {
 		this.coordinate.add(coordinate);
 		return this;
 	}

@@ -19,7 +19,7 @@ public interface Marshallable {
 
 		/**
 		 * Recognize symbol and consume it.
-		 * @param string the input string (string builder) to parse.
+		 * @param string the input string (string builder) to parseSexadecimal.
 		 * @param symbol the symbol to recognize
 		 * @return true if parsing is ok.
 		 */
@@ -31,7 +31,7 @@ public interface Marshallable {
 
 		/**
 		 * Recognize double and consume it.
-		 * @param string the input string (string builder) to parse.
+		 * @param string the input string (string builder) to parseSexadecimal.
 		 * @return true if parsing is ok.
 		 */
 		public static Double consumeDouble(StringBuilder string) {
@@ -47,7 +47,7 @@ public interface Marshallable {
 
 		/**
 		 * Remove unnecessary blanks in the input string.
-		 * @param string the input string (string builder) to parse.
+		 * @param string the input string (string builder) to parseSexadecimal.
 		 */
 		public static void removeBlanks(StringBuilder string) {
 			while (string.indexOf(" ") == 0) {
@@ -58,7 +58,7 @@ public interface Marshallable {
 		/**
 		 * Look at the next symbol and recognize it without consuming it. LL(1) parser, first symbol is deterministic for the choice.
 		 *
-		 * @param string the input string (string builder) to parse.
+		 * @param string the input string (string builder) to parseSexadecimal.
 		 * @param symbol the symbol to recognize
 		 * @return true if next symbol corresponding.
 		 */

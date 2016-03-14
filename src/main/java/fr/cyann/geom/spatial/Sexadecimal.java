@@ -15,19 +15,20 @@ import java.util.regex.Pattern;
  */
 public class Sexadecimal {
 	public static final String FORMAT_REGEX = "(\\d{2}):(\\d{2}):(\\d{2}\\.\\d{3})";
-	private final double integer, minute, second;
+	private final int degree, minute;
+	private final double second;
 
-	public Sexadecimal(double integer, double minute, double second) {
-		this.integer = integer;
+	public Sexadecimal(int degree, int minute, double second) {
+		this.degree = degree;
 		this.minute = minute;
 		this.second = second;
 	}
 
-	public double getInteger() {
-		return integer;
+	public int getDegree() {
+		return degree;
 	}
 
-	public double getMinute() {
+	public int getMinute() {
 		return minute;
 	}
 
@@ -36,15 +37,15 @@ public class Sexadecimal {
 	}
 
 	public double toDouble() {
-		return integer + minute / 60d + second / 3600;
+		return degree + minute / 60d + second / 3600;
 	}
 
-	public static Sexadecimal parse(String coord, String regex) {
+	public static Sexadecimal parseSexadecimal(String coord, String regex) {
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(coord);
 		if (matcher.find()) {
-			double d = Double.parseDouble(matcher.group(1));
-			double m = Double.parseDouble(matcher.group(2));
+			int d = Integer.parseInt(matcher.group(1));
+			int m = Integer.parseInt(matcher.group(2));
 			double s = Double.parseDouble(matcher.group(3));
 
 			return new Sexadecimal(d, m, s);
@@ -53,7 +54,7 @@ public class Sexadecimal {
 		return null;
 	}
 
-	public static Sexadecimal parse(String coord) {
-		return parse(coord, FORMAT_REGEX);
+	public static Sexadecimal parseSexadecimal(String coord) {
+		return parseSexadecimal(coord, FORMAT_REGEX);
 	}
 }
