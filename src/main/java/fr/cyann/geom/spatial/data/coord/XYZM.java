@@ -33,4 +33,8 @@ public class XYZM extends XYZ {
 		stringBuilder.append(' ');
 		marshallNumber(stringBuilder, m);
 	}
+
+	public double getM() {
+		return m;
+	}
 }

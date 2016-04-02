@@ -18,16 +18,36 @@ public abstract class Geometry<C extends XY> implements Marshallable {
 		this.type = type;
 	}
 
+	public Class<C> getCoordinateType() {
+		return type;
+	}
+
 	void appendType(StringBuilder stringBuilder) {
 		if (XYZ.class == type) stringBuilder.append("Z");
 		else if (XYM.class == type) stringBuilder.append("M");
 		else if (XYZM.class == type) stringBuilder.append("ZM");
 	}
 
+	/*
+	To be continued
+	public static Class<? extends Geometry> getGeometryType(String string) {
+		if (string.startsWith("LINESTRING")) {
+			return LineString.class;
+		}
+
+		return null;
+	}
+	*/
+
+	//public static Class<? extends XY>
+
 	static Class<? extends XY> getCoordType(StringBuilder stringBuilder, String prefix) {
-		if (Parse.consumeSymbol(stringBuilder, prefix + "ZM") || Parse.consumeSymbol(stringBuilder, prefix + " ZM")) return XYZM.class;
-		else if (Parse.consumeSymbol(stringBuilder, prefix + "M") || Parse.consumeSymbol(stringBuilder, prefix + " M")) return XYM.class;
-		else if (Parse.consumeSymbol(stringBuilder, prefix + "Z") || Parse.consumeSymbol(stringBuilder, prefix + " Z")) return XYZ.class;
+		if (Parse.consumeSymbol(stringBuilder, prefix + "ZM") || Parse.consumeSymbol(stringBuilder, prefix + " ZM"))
+			return XYZM.class;
+		else if (Parse.consumeSymbol(stringBuilder, prefix + "M") || Parse.consumeSymbol(stringBuilder, prefix + " M"))
+			return XYM.class;
+		else if (Parse.consumeSymbol(stringBuilder, prefix + "Z") || Parse.consumeSymbol(stringBuilder, prefix + " Z"))
+			return XYZ.class;
 		else if (Parse.consumeSymbol(stringBuilder, prefix)) return XY.class;
 		else return null;
 	}
@@ -38,7 +58,7 @@ public abstract class Geometry<C extends XY> implements Marshallable {
 		if (XYZ.class == type) coord = XYZ.unMarshall(stringBuilder);
 		if (XYM.class == type) coord = XYM.unMarshall(stringBuilder);
 		if (XYZM.class == type) coord = XYZM.unMarshall(stringBuilder);
-		return  (C)coord;
+		return (C) coord;
 	}
 
 	@Override

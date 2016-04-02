@@ -88,7 +88,7 @@ public class Point<C extends XY> extends Geometry {
 		return new Point(coord);
 	}
 
-	public XY getCoordinate() {
+	public C getCoordinate() {
 		return coordinate;
 	}
 
