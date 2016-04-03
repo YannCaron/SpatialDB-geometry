@@ -73,6 +73,10 @@ public class Polygon<C extends XY> extends Geometry {
         return polygon;
     }
 
+	public Iterable<C> getExterior() {
+		return exterior;
+	}
+
 	public void addExteriorCoordinate(C coord) {
 		exterior.add(coord);
 	}

@@ -37,4 +37,14 @@ public class XYZM extends XYZ {
 	public double getM() {
 		return m;
 	}
+
+	@Override
+	public String toString() {
+		return "XYZM{" +
+				"x=" + getX() +
+				", y=" + getY() +
+				", z=" + getZ() +
+				", m=" + m +
+				'}';
+	}
 }

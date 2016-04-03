@@ -76,4 +76,12 @@ public class XY implements Marshallable {
         marshallNumber(stringBuilder, y);
     }
 
+	@Override
+	public String toString() {
+		return "XYZM{" +
+				"x=" + x +
+				", y=" + y +
+				'}';
+	}
+
 }

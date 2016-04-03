@@ -35,4 +35,14 @@ public class XYM extends XY {
 		stringBuilder.append(' ');
 		marshallNumber(stringBuilder, m);
 	}
+
+	@Override
+	public String toString() {
+		return "XYZM{" +
+				"x=" + getX() +
+				", y=" + getY() +
+				", m=" + m +
+				'}';
+	}
+
 }

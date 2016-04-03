@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * The PolyhedralSurface definition.
  */
-public class PolyhedralSurface<C extends XY> extends Geometry<XY> {
+public class PolyhedralSurface<C extends XY> extends Geometry {
 
 	private final List<NormalGroup<C>> groups;
 
