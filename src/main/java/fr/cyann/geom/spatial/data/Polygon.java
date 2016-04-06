@@ -44,7 +44,7 @@ public class Polygon<C extends XY> extends Geometry {
 
         // '('
         Parse.removeBlanks(stringBuilder);
-        if (!Parse.consumeSymbol(stringBuilder, "(")) return null;
+        if (!Parse.consumeSymbol(stringBuilder, '(')) return null;
 
         // <exterior>
 	    CoordList<C> exterior = CoordList.unMarshall(type, stringBuilder, true);
@@ -53,10 +53,10 @@ public class Polygon<C extends XY> extends Geometry {
         Polygon<C> polygon = new Polygon(type, exterior);
 
         // <interior>*
-        while (stringBuilder.length() > 0 && Parse.nextSymbol(stringBuilder, ",")) {
+        while (stringBuilder.length() > 0 && Parse.nextSymbol(stringBuilder, ',')) {
 
             // ','
-            Parse.consumeSymbol(stringBuilder, ",");
+            Parse.consumeSymbol(stringBuilder, ',');
 	        Parse.removeBlanks(stringBuilder);
 
             // <interior>
@@ -68,7 +68,7 @@ public class Polygon<C extends XY> extends Geometry {
 
         // ')'
         Parse.removeBlanks(stringBuilder);
-        if (!Parse.consumeSymbol(stringBuilder, ")")) return null;
+        if (!Parse.consumeSymbol(stringBuilder, ')')) return null;
 
         return polygon;
     }

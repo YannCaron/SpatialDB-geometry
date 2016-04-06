@@ -27,8 +27,8 @@ public class XYZ extends XY {
 
 	public static XYZ unMarshall(StringBuilder string) {
 		XY xy = XY.unMarshall(string);
+                
 		Marshallable.Parse.removeBlanks(string);
-
 		Double z = Marshallable.Parse.consumeDouble(string);
 		if (z == null) return null;
 		return new XYZ(xy.getX(), xy.getY(), z);

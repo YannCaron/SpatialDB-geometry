@@ -59,11 +59,11 @@ public class CoordList<C extends XY> implements Marshallable, Iterable<C> {
 
         // '('
         Parse.removeBlanks(stringBuilder);
-        if (!Parse.consumeSymbol(stringBuilder, "(")) return null;
+        if (!Parse.consumeSymbol(stringBuilder, '(')) return null;
 
         // (<xy> (',' <xy>)*)?
         CoordList<C> list = new CoordList(closed);
-        while (stringBuilder.length() > 0 && !(Parse.nextSymbol(stringBuilder, ")") || (Parse.nextSymbol(stringBuilder, ",")))) {
+        while (stringBuilder.length() > 0 && !(Parse.nextSymbol(stringBuilder, ')') || (Parse.nextSymbol(stringBuilder, ',')))) {
 
             // <xy>
             Parse.removeBlanks(stringBuilder);
@@ -73,13 +73,13 @@ public class CoordList<C extends XY> implements Marshallable, Iterable<C> {
 
             // ','
             Parse.removeBlanks(stringBuilder);
-            if (!Parse.consumeSymbol(stringBuilder, ",")) break;
+            if (!Parse.consumeSymbol(stringBuilder, ',')) break;
 
         }
 
         // ')'
         Parse.removeBlanks(stringBuilder);
-        if (!Parse.consumeSymbol(stringBuilder, ")")) return null;
+        if (!Parse.consumeSymbol(stringBuilder, ')')) return null;
         return list;
     }
 

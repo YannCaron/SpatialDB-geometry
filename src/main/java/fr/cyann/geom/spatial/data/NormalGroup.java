@@ -57,18 +57,18 @@ public class NormalGroup<C extends XY> implements Marshallable  {
 	public static <C extends XY> NormalGroup<C> unMarshall(Class<C> type, StringBuilder stringBuilder) {
 
 		Parse.removeBlanks(stringBuilder);
-		if (!Parse.consumeSymbol(stringBuilder, "(")) return null;
+		if (!Parse.consumeSymbol(stringBuilder, '(')) return null;
 
 		NormalGroup<C> normalGroup = new NormalGroup<>();
 
 		// <groups>
 		boolean first = true;
 		Parse.removeBlanks(stringBuilder);
-		while (stringBuilder.length() > 0 && (first || Parse.nextSymbol(stringBuilder, ","))) {
+		while (stringBuilder.length() > 0 && (first || Parse.nextSymbol(stringBuilder, ','))) {
 
 			if (!first) {
 				// ','
-				Parse.consumeSymbol(stringBuilder, ",");
+				Parse.consumeSymbol(stringBuilder, ',');
 			}
 			first = false;
 
@@ -81,7 +81,7 @@ public class NormalGroup<C extends XY> implements Marshallable  {
 		}
 
 		Parse.removeBlanks(stringBuilder);
-		if (!Parse.consumeSymbol(stringBuilder, ")")) return null;
+		if (!Parse.consumeSymbol(stringBuilder, ')')) return null;
 
 		return normalGroup;
 	}

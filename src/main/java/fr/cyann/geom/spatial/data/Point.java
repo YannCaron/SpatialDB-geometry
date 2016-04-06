@@ -78,13 +78,13 @@ public class Point<C extends XY> extends Geometry {
 		if (type == null || !type.equals(parsedType)) return null;
 
 		Parse.removeBlanks(stringBuilder);
-		if (!Parse.consumeSymbol(stringBuilder, "(")) return null;
+		if (!Parse.consumeSymbol(stringBuilder, '(')) return null;
 
 		XY coord = unmarshallCoord(type, stringBuilder);
 		if (coord == null) return null;
 
 		Parse.removeBlanks(stringBuilder);
-		if (!Parse.consumeSymbol(stringBuilder, ")")) return null;
+		if (!Parse.consumeSymbol(stringBuilder, ')')) return null;
 		return new Point(coord);
 	}
 

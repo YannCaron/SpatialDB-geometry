@@ -54,7 +54,7 @@ public class GeometryCollection extends Geometry {
 
         // '('
         Parse.removeBlanks(string);
-        if (!Parse.consumeSymbol(string, "(")) return null;
+        if (!Parse.consumeSymbol(string, '(')) return null;
 
         // <geometry>*
         while (string.length() > 0) {
@@ -98,17 +98,17 @@ public class GeometryCollection extends Geometry {
             if (geometry == null) return null;
             geometryCollection.addGeometry(geometry);
 
-            if (!Parse.nextSymbol(string, ",")) break;
+            if (!Parse.nextSymbol(string, ',')) break;
 
             // ','
             Parse.removeBlanks(string);
-            Parse.consumeSymbol(string, ",");
+            Parse.consumeSymbol(string, ',');
 
         }
 
         // ')'
         Parse.removeBlanks(string);
-        if (!Parse.consumeSymbol(string, ")")) return null;
+        if (!Parse.consumeSymbol(string, ')')) return null;
         return geometryCollection;
     }
 }

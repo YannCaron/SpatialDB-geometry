@@ -74,18 +74,18 @@ public class PolyhedralSurface<C extends XY> extends Geometry {
 
 		// '('
 		Parse.removeBlanks(stringBuilder);
-		if (!Parse.consumeSymbol(stringBuilder, "(")) return null;
+		if (!Parse.consumeSymbol(stringBuilder, '(')) return null;
 
 		PolyhedralSurface<C> polyhedralSurface = new PolyhedralSurface(type);
 
 		// <interior>*
 		boolean first = true;
 		Parse.removeBlanks(stringBuilder);
-		while (stringBuilder.length() > 0 && (first || Parse.nextSymbol(stringBuilder, ","))) {
+		while (stringBuilder.length() > 0 && (first || Parse.nextSymbol(stringBuilder, ','))) {
 
 			if (!first) {
 				// ','
-				Parse.consumeSymbol(stringBuilder, ",");
+				Parse.consumeSymbol(stringBuilder, ',');
 			}
 			first = false;
 
@@ -97,7 +97,7 @@ public class PolyhedralSurface<C extends XY> extends Geometry {
 
 		// ')'
 		Parse.removeBlanks(stringBuilder);
-		if (!Parse.consumeSymbol(stringBuilder, ")")) return null;
+		if (!Parse.consumeSymbol(stringBuilder, ')')) return null;
 
 		return polyhedralSurface;
 	}
