@@ -23,11 +23,11 @@ import java.util.List;
  */
 public class PolyhedralSurface<C extends XY> extends Geometry {
 
-	private final List<NormalGroup<C>> groups;
+	private final List<Polygon<C>> polygons;
 
 	public PolyhedralSurface(Class<XY> type) {
 		super(type);
-		groups = new ArrayList<>();
+		polygons = new ArrayList<>();
 	}
 
 	@Override
@@ -37,11 +37,11 @@ public class PolyhedralSurface<C extends XY> extends Geometry {
 
 		PolyhedralSurface<?> that = (PolyhedralSurface<?>) o;
 
-		if (groups == null && that.groups != null) return false;
-		if (groups.size() != that.groups.size()) return false;
+		if (polygons == null && that.polygons != null) return false;
+		if (polygons.size() != that.polygons.size()) return false;
 
-		for (int i = 0; i < groups.size(); i++) {
-			if (!groups.get(i).equals(that.groups.get(i))) return false;
+		for (int i = 0; i < polygons.size(); i++) {
+			if (!polygons.get(i).equals(that.polygons.get(i))) return false;
 		}
 
 		return true;
@@ -49,21 +49,15 @@ public class PolyhedralSurface<C extends XY> extends Geometry {
 
 	@Override
 	public int hashCode() {
-		return groups != null ? groups.hashCode() : 0;
+		return polygons != null ? polygons.hashCode() : 0;
 	}
 
-	public NormalGroup<C> createGroup() {
-		NormalGroup<C> normalGroup = new NormalGroup<>();
-		groups.add(normalGroup);
-		return normalGroup;
+	void addPolygon(Polygon polygon) {
+		polygons.add(polygon);
 	}
 
-	void addNormalGroup(NormalGroup group) {
-		groups.add(group);
-	}
-
-	public List<NormalGroup<C>> getNormalGroups() {
-		return groups;
+	public Iterable<Polygon<C>> getPolygons() {
+		return polygons;
 	}
 
 	public static <C extends XY>PolyhedralSurface<C> unMarshall(Class<C> type, String stringBuilder) {
@@ -73,7 +67,7 @@ public class PolyhedralSurface<C extends XY> extends Geometry {
 
 	public static <C extends XY>PolyhedralSurface<C> unMarshall(Class<C> type, StringBuilder stringBuilder) {
 
-		// 'POLYGON'
+		// 'POLYHEDRALSURFACE'
 		Parse.removeBlanks(stringBuilder);
 		Class<? extends XY> parsedType = getCoordType(stringBuilder, "POLYHEDRALSURFACE");
 		if (type == null || !type.equals(parsedType)) return null;
@@ -84,7 +78,7 @@ public class PolyhedralSurface<C extends XY> extends Geometry {
 
 		PolyhedralSurface<C> polyhedralSurface = new PolyhedralSurface(type);
 
-		// <interior>*
+		// <polygon>*
 		boolean first = true;
 		Parse.removeBlanks(stringBuilder);
 		while (stringBuilder.length() > 0 && (first || Parse.nextSymbol(stringBuilder, ','))) {
@@ -94,11 +88,7 @@ public class PolyhedralSurface<C extends XY> extends Geometry {
 				Parse.consumeSymbol(stringBuilder, ',');
 			}
 			first = false;
-
-			NormalGroup<C> normalGroup = NormalGroup.unMarshall(type, stringBuilder);
-			polyhedralSurface.addNormalGroup(normalGroup);
-
-			Parse.removeBlanks(stringBuilder);
+			polyhedralSurface.addPolygon(Polygon.unMarshallData(type, stringBuilder));
 		}
 
 		// ')'
@@ -120,20 +110,14 @@ public class PolyhedralSurface<C extends XY> extends Geometry {
 
 	public static <C extends XY> PolyhedralSurface<C> unMarshall(Class<C> type, ByteBuffer buffer) {
 		PolyhedralSurface<C> polyhedralSurface = new PolyhedralSurface(type);
-		int normalGroupSize = buffer.getInt();
+		int polygonSize = buffer.getInt();
 
-		for (int ng = 0; ng < normalGroupSize; ng++) {
+		for (int ng = 0; ng < polygonSize; ng++) {
 			buffer.get(); // endianess
-			buffer.getInt(); // 3 polygon
-			int faceSize = buffer.getInt();
+			buffer.getInt(); // geometry type
 
-			NormalGroup<C> normalGroup = new NormalGroup<>();
-			for (int f = 0; f < faceSize; f++) {
-				CoordList<C> face = CoordList.unMarshall(type, buffer, true);
-				normalGroup.addFace(face);
-			}
-			polyhedralSurface.addNormalGroup(normalGroup);
-
+			Polygon<C> polygon = (Polygon<C>) Polygon.unMarshall(type, buffer);
+			polyhedralSurface.addPolygon(polygon);
 		}
 
 		return polyhedralSurface;
@@ -153,11 +137,11 @@ public class PolyhedralSurface<C extends XY> extends Geometry {
 		stringBuilder.append('(');
 
 		boolean first = true;
-		for (NormalGroup<C> normalGroup : groups) {
+		for (Polygon<C> polygon : polygons) {
 			if (!first) stringBuilder.append(", ");
 			first = false;
 
-			normalGroup.marshall(stringBuilder);
+			polygon.marshallData(stringBuilder);
 
 		}
 

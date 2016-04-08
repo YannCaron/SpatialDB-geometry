@@ -6,9 +6,6 @@ import fr.cyann.geom.spatial.data.coord.XYZ;
 import fr.cyann.geom.spatial.data.coord.XYZM;
 import junit.framework.TestCase;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-
 /**
  * Copyright (C) 06/03/16 Yann Caron aka cyann
  * <p>
@@ -19,12 +16,14 @@ import java.nio.ByteOrder;
  **/
 public class PointTest extends TestCase {
 
-	public static final byte[] POINT = new byte[]{ // POINT (10.0, 10.0)
+	public static final byte[] BYTES = new byte[]{ // POINT (10.0, 10.0)
 			0x01, // 01 - Little-endian
 			0x01, 0x00, 0x00, 0x00,  // POINT
 			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x24, 0x40, // 10.0
 			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x24, 0x40  // 10.0
 	};
+
+	public static final String STRING = "POINT (10 10)";
 
 	public void testMarshall() throws Exception {
 
@@ -40,7 +39,6 @@ public class PointTest extends TestCase {
 
 	}
 
-
 	public void testUnMarshall() throws Exception {
 
 		Point<XY> pt1 = Point.newPoint(10, 20);
@@ -54,35 +52,8 @@ public class PointTest extends TestCase {
 		assertEquals(pt4, Point.unMarshall(XYZM.class, "POINTZM (10 20 30 3)"));
 	}
 
-
-	public static String bytesToHex(byte[] bytes) {
-		StringBuffer buffer = new StringBuffer();
-		for (int i=0; i<bytes.length; i++) {
-			buffer.append(Integer.toHexString(bytes[i] & 0xF));
-		}
-		return buffer.toString().toUpperCase();
-	}
-
-	public void testBinaryUnMarshall() throws Exception {
-
-		ByteBuffer byteBuffer = ByteBuffer.wrap(POINT);
-		byte order = byteBuffer.get();
-
-		if (order == 0x00) {
-			byteBuffer.order(ByteOrder.BIG_ENDIAN);
-		} else {
-			byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
-		}
-
-		int geometryType = byteBuffer.getInt();
-		System.out.println(geometryType);
-
-		double x = byteBuffer.getDouble();
-		double y = byteBuffer.getDouble();
-
-		System.out.println(x);
-		System.out.println(y);
-
+	public void testUnMarshallBinary() throws Exception {
+		assertEquals(Point.unMarshall(XY.class, STRING), Point.unMarshall(BYTES));
 	}
 
 

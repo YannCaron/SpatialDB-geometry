@@ -48,37 +48,40 @@ public class Polygon<C extends XY> extends Geometry {
 	    Class<? extends XY> parsedType = getCoordType(stringBuilder, "POLYGON");
 		if (type == null || !type.equals(parsedType)) return null;
 
-        // '('
-        Parse.removeBlanks(stringBuilder);
-        if (!Parse.consumeSymbol(stringBuilder, '(')) return null;
-
-        // <exterior>
-	    CoordList<C> exterior = CoordList.unMarshall(type, stringBuilder, true);
-	    if (exterior == null) return null;
-
-        Polygon<C> polygon = new Polygon(type, exterior);
-
-        // <interior>*
-        while (stringBuilder.length() > 0 && Parse.nextSymbol(stringBuilder, ',')) {
-
-            // ','
-            Parse.consumeSymbol(stringBuilder, ',');
-	        Parse.removeBlanks(stringBuilder);
-
-            // <interior>
-	        CoordList interior = CoordList.unMarshall(type, stringBuilder, true);
-	        if (interior == null) return null;
-            polygon.addInterior(interior);
-
-        }
-
-        // ')'
-        Parse.removeBlanks(stringBuilder);
-        if (!Parse.consumeSymbol(stringBuilder, ')')) return null;
-
-        return polygon;
+        return unMarshall(type, stringBuilder);
     }
 
+	static <C extends XY>Polygon<C> unMarshallData(Class<C> type, StringBuilder stringBuilder) {
+		// '('
+		Parse.removeBlanks(stringBuilder);
+		if (!Parse.consumeSymbol(stringBuilder, '(')) return null;
+
+		// <exterior>
+		CoordList<C> exterior = CoordList.unMarshall(type, stringBuilder, true);
+		if (exterior == null) return null;
+
+		Polygon<C> polygon = new Polygon(type, exterior);
+
+		// <interior>*
+		while (stringBuilder.length() > 0 && Parse.nextSymbol(stringBuilder, ',')) {
+
+			// ','
+			Parse.consumeSymbol(stringBuilder, ',');
+			Parse.removeBlanks(stringBuilder);
+
+			// <interior>
+			CoordList interior = CoordList.unMarshall(type, stringBuilder, true);
+			if (interior == null) return null;
+			polygon.addInterior(interior);
+
+		}
+
+		// ')'
+		Parse.removeBlanks(stringBuilder);
+		if (!Parse.consumeSymbol(stringBuilder, ')')) return null;
+
+		return polygon;
+	}
 	public static Polygon<? extends XY> unMarshall(byte[] bytes) {
 		ByteBuffer buffer = BinaryUtil.toByteBufferEndianness(bytes);
 		int geometryType = buffer.getInt();
@@ -125,16 +128,20 @@ public class Polygon<C extends XY> extends Geometry {
         stringBuilder.append("POLYGON");
 	    appendType(stringBuilder);
         stringBuilder.append(' ');
-        stringBuilder.append('(');
-
-        //if (getCoordinate().size() < 4) throw new BadGeometryException("POLYGON geometry should hava at least 4 coordinates!");
-	    exterior.marshall(stringBuilder);
-
-        for (CoordList interior : interiors) {
-            stringBuilder.append(", ");
-            interior.marshall(stringBuilder);
-        }
-
-        stringBuilder.append(')');
+        marshallData(stringBuilder);
     }
+
+	void marshallData(StringBuilder stringBuilder) throws BadGeometryException {
+		stringBuilder.append('(');
+
+		//if (getCoordinate().size() < 4) throw new BadGeometryException("POLYGON geometry should hava at least 4 coordinates!");
+		exterior.marshall(stringBuilder);
+
+		for (CoordList interior : interiors) {
+			stringBuilder.append(", ");
+			interior.marshall(stringBuilder);
+		}
+
+		stringBuilder.append(')');
+	}
 }

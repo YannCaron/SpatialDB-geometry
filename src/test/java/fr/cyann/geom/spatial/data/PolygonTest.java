@@ -35,7 +35,6 @@ public class PolygonTest extends TestCase {
 
 	public void testUnMarshallBinary() throws Exception {
 		assertEquals(Polygon.unMarshall(XY.class, STRING), Polygon.unMarshall(BYTES));
-
 	}
 
 }

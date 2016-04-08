@@ -16,34 +16,30 @@ public class PolyhedralSurfaceTest extends TestCase {
 
 	public void testUnMarshall() throws Exception {
 		PolyhedralSurface<XY> pt1 = new PolyhedralSurface(XY.class);
-		pt1.createGroup()
-				.addFace(new CoordList<XY>(true).add(new XY(10, 20)).add(new XY(20, 20)).add(new XY(20, 10)));
+		pt1.addPolygon(new Polygon(XY.class, new CoordList<XY>(true).add(new XY(10, 20)).add(new XY(20, 20)).add(new XY(20, 10))));
 
 		PolyhedralSurface<XYZ> pt2 = new PolyhedralSurface(XYZ.class);
-		pt2.createGroup()
-				.addFace(new CoordList<XYZ>(true).add(new XYZ(10, 20, 30)))
-				.addFace(new CoordList<XYZ>(true).add(new XYZ(20, 20, 30)))
-				.addFace(new CoordList<XYZ>(true).add(new XYZ(20, 10, 30)))
-				.addFace(new CoordList<XYZ>(true).add(new XYZ(10, 20, 30)));
+		pt2.addPolygon(new Polygon(XYZ.class, new CoordList<XYZ>(true).add(new XYZ(10, 20, 30))));
+		pt2.addPolygon(new Polygon(XYZ.class, new CoordList<XYZ>(true).add(new XYZ(20, 20, 30))));
+		pt2.addPolygon(new Polygon(XYZ.class, new CoordList<XYZ>(true).add(new XYZ(20, 10, 30))));
+		pt2.addPolygon(new Polygon(XYZ.class, new CoordList<XYZ>(true).add(new XYZ(10, 20, 30))));
 
 		assertEquals("POLYHEDRALSURFACE (((10 20, 20 20, 20 10, 10 20)))", pt1.toString());
-		assertEquals("POLYHEDRALSURFACEZ (((10 20 30), (20 20 30), (20 10 30), (10 20 30)))", pt2.toString());
+		assertEquals("POLYHEDRALSURFACEZ (((10 20 30)), ((20 20 30)), ((20 10 30)), ((10 20 30)))", pt2.toString());
 
 	}
 
 	public void testMarshall() throws Exception {
 		PolyhedralSurface<XY> pt1 = new PolyhedralSurface(XY.class);
-		pt1.createGroup()
-				.addFace(new CoordList<XY>(true).add(new XY(10, 20)).add(new XY(20, 20)).add(new XY(20, 10)).add(new XY(10, 20)));
+		pt1.addPolygon(new Polygon(XY.class, new CoordList<XY>(true).add(new XY(10, 20)).add(new XY(20, 20)).add(new XY(20, 10))));
 
 		PolyhedralSurface<XYZ> pt2 = new PolyhedralSurface(XYZ.class);
-		pt2.createGroup()
-				.addFace(new CoordList<XYZ>(true).add(new XYZ(10, 20, 30)))
-				.addFace(new CoordList<XYZ>(true).add(new XYZ(20, 20, 30)))
-				.addFace(new CoordList<XYZ>(true).add(new XYZ(20, 10, 30)))
-				.addFace(new CoordList<XYZ>(true).add(new XYZ(10, 20, 30)));
+		pt2.addPolygon(new Polygon(XYZ.class, new CoordList<XYZ>(true).add(new XYZ(10, 20, 30))));
+		pt2.addPolygon(new Polygon(XYZ.class, new CoordList<XYZ>(true).add(new XYZ(20, 20, 30))));
+		pt2.addPolygon(new Polygon(XYZ.class, new CoordList<XYZ>(true).add(new XYZ(20, 10, 30))));
+		pt2.addPolygon(new Polygon(XYZ.class, new CoordList<XYZ>(true).add(new XYZ(10, 20, 30))));
 
-		assertEquals(pt1, PolyhedralSurface.unMarshall(XY.class, "POLYHEDRALSURFACE (((10 20, 20 20, 20 10, 10 20)))"));
-		assertEquals(pt2, PolyhedralSurface.unMarshall(XYZ.class, "POLYHEDRALSURFACEZ (((10 20 30), (20 20 30), (20 10 30), (10 20 30)))"));
+		assertEquals(pt1.toString(), PolyhedralSurface.unMarshall(XY.class, "POLYHEDRALSURFACE (((10 20, 20 20, 20 10, 10 20)))").toString());
+		assertEquals(pt2.toString(), PolyhedralSurface.unMarshall(XYZ.class, "POLYHEDRALSURFACEZ (((10 20 30)), ((20 20 30)), ((20 10 30)), ((10 20 30)))").toString());
 	}
 }
