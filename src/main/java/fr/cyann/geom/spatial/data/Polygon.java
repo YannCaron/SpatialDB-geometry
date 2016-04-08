@@ -8,7 +8,13 @@ package fr.cyann.geom.spatial.data; /**
  **/
 
 import fr.cyann.geom.spatial.data.coord.XY;
+import fr.cyann.geom.spatial.data.coord.XYM;
+import fr.cyann.geom.spatial.data.coord.XYZ;
+import fr.cyann.geom.spatial.data.coord.XYZM;
+import fr.cyann.geom.spatial.data.parsing.BinaryUtil;
+import fr.cyann.geom.spatial.data.parsing.GeometryType;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,6 +78,29 @@ public class Polygon<C extends XY> extends Geometry {
 
         return polygon;
     }
+
+	public static Polygon<? extends XY> unMarshall(byte[] bytes) {
+		ByteBuffer buffer = BinaryUtil.toByteBufferEndianness(bytes);
+		int geometryType = buffer.getInt();
+		if (geometryType == GeometryType.POLYGON.getCode()) return unMarshall(XY.class, buffer);
+		if (geometryType == GeometryType.POLYGONZ.getCode()) return unMarshall(XYZ.class, buffer);
+		if (geometryType == GeometryType.POLYGONM.getCode()) return unMarshall(XYM.class, buffer);
+		if (geometryType == GeometryType.POLYGONZM.getCode()) return unMarshall(XYZM.class, buffer);
+		return null;
+	}
+
+	public static <C extends XY> Polygon<C> unMarshall(Class<C> type, ByteBuffer buffer) {
+		int size = buffer.getInt();
+		CoordList<C> exterior = CoordList.unMarshall(type, buffer, true);
+
+		Polygon<C> polygon = new Polygon<C>(type, exterior);
+
+		for (int i = 1; i < size; i++) {
+			polygon.addInterior(CoordList.unMarshall(type, buffer, true));
+		}
+
+		return polygon;
+	}
 
 	public Iterable<C> getExterior() {
 		return exterior;

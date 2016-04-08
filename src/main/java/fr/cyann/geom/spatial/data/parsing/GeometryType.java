@@ -80,6 +80,10 @@ public enum GeometryType {
 
 	private final int code;
 
+	public final int getCode() {
+		return code;
+	}
+
 	GeometryType(int code) {
 		this.code = code;
 	}

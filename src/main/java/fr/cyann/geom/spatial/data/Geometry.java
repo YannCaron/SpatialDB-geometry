@@ -4,6 +4,10 @@ import fr.cyann.geom.spatial.data.coord.XY;
 import fr.cyann.geom.spatial.data.coord.XYM;
 import fr.cyann.geom.spatial.data.coord.XYZ;
 import fr.cyann.geom.spatial.data.coord.XYZM;
+import fr.cyann.geom.spatial.data.parsing.BinaryUtil;
+import fr.cyann.geom.spatial.data.parsing.GeometryType;
+
+import java.nio.ByteBuffer;
 
 /**
  * Created by cyann on 20/12/15.
@@ -31,6 +35,33 @@ public abstract class Geometry<C extends XY> implements Marshallable {
             stringBuilder.append("ZM");
         }
     }
+
+	public static <C extends XY> Geometry<C> unMarshall(byte[] bytes) {
+		ByteBuffer buffer = BinaryUtil.toByteBufferEndianness(bytes);
+		int geometryType = buffer.getInt();
+
+		if (geometryType == GeometryType.POINT.getCode()) return Point.unMarshall(XY.class, buffer);
+		if (geometryType == GeometryType.POINTZ.getCode()) return Point.unMarshall(XYZ.class, buffer);
+		if (geometryType == GeometryType.POINTM.getCode()) return Point.unMarshall(XYM.class, buffer);
+		if (geometryType == GeometryType.POINTZM.getCode()) return Point.unMarshall(XYZM.class, buffer);
+
+		if (geometryType == GeometryType.LINESTRING.getCode()) return LineString.unMarshall(XY.class, buffer);
+		if (geometryType == GeometryType.LINESTRINGZ.getCode()) return LineString.unMarshall(XYZ.class, buffer);
+		if (geometryType == GeometryType.LINESTRINGM.getCode()) return LineString.unMarshall(XYM.class, buffer);
+		if (geometryType == GeometryType.LINESTRINGZM.getCode()) return LineString.unMarshall(XYZM.class, buffer);
+
+		if (geometryType == GeometryType.POLYGON.getCode()) return Polygon.unMarshall(XY.class, buffer);
+		if (geometryType == GeometryType.POLYGONZ.getCode()) return Polygon.unMarshall(XYZ.class, buffer);
+		if (geometryType == GeometryType.POLYGONM.getCode()) return Polygon.unMarshall(XYM.class, buffer);
+		if (geometryType == GeometryType.POLYGONZM.getCode()) return Polygon.unMarshall(XYZM.class, buffer);
+
+		if (geometryType == GeometryType.POLYHEDRALSURFACE.getCode()) return PolyhedralSurface.unMarshall(XY.class, buffer);
+		if (geometryType == GeometryType.POLYHEDRALSURFACEZ.getCode()) return PolyhedralSurface.unMarshall(XYZ.class, buffer);
+		if (geometryType == GeometryType.POLYHEDRALSURFACEM.getCode()) return PolyhedralSurface.unMarshall(XYM.class, buffer);
+		if (geometryType == GeometryType.POLYHEDRALSURFACEM.getCode()) return PolyhedralSurface.unMarshall(XYZM.class, buffer);
+
+		return null;
+	}
 
     public static <C extends XY> Geometry<C> unMarshall(String string) {
         return unMarshall(new StringBuilder(string));

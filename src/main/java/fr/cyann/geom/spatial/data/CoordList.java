@@ -8,7 +8,9 @@ package fr.cyann.geom.spatial.data; /**
  **/
 
 import fr.cyann.geom.spatial.data.coord.XY;
+import fr.cyann.geom.spatial.data.parsing.BinaryUtil;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -82,6 +84,15 @@ public class CoordList<C extends XY> implements Marshallable, Iterable<C> {
         if (!Parse.consumeSymbol(stringBuilder, ')')) return null;
         return list;
     }
+
+	public static <C extends XY> CoordList<C> unMarshall(Class<C> type, ByteBuffer buffer, boolean closed) {
+		CoordList<C> coordList = new CoordList<>(closed);
+		int size = buffer.getInt();
+		for (int i = 0; i < size; i++) {
+			coordList.add(BinaryUtil.unMarshallCoord(type, buffer));
+		}
+		return coordList;
+	}
 
 	// accessor
     public List<C> getCoords() {

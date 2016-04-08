@@ -8,7 +8,13 @@ package fr.cyann.geom.spatial.data;/**
  **/
 
 import fr.cyann.geom.spatial.data.coord.XY;
+import fr.cyann.geom.spatial.data.coord.XYM;
+import fr.cyann.geom.spatial.data.coord.XYZ;
+import fr.cyann.geom.spatial.data.coord.XYZM;
+import fr.cyann.geom.spatial.data.parsing.BinaryUtil;
+import fr.cyann.geom.spatial.data.parsing.GeometryType;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +58,7 @@ public class PolyhedralSurface<C extends XY> extends Geometry {
 		return normalGroup;
 	}
 
-	void addFaceNormalGroup(NormalGroup group) {
+	void addNormalGroup(NormalGroup group) {
 		groups.add(group);
 	}
 
@@ -90,7 +96,7 @@ public class PolyhedralSurface<C extends XY> extends Geometry {
 			first = false;
 
 			NormalGroup<C> normalGroup = NormalGroup.unMarshall(type, stringBuilder);
-			polyhedralSurface.addFaceNormalGroup(normalGroup);
+			polyhedralSurface.addNormalGroup(normalGroup);
 
 			Parse.removeBlanks(stringBuilder);
 		}
@@ -98,6 +104,37 @@ public class PolyhedralSurface<C extends XY> extends Geometry {
 		// ')'
 		Parse.removeBlanks(stringBuilder);
 		if (!Parse.consumeSymbol(stringBuilder, ')')) return null;
+
+		return polyhedralSurface;
+	}
+
+	public static PolyhedralSurface<? extends XY> unMarshall(byte[] bytes) {
+		ByteBuffer buffer = BinaryUtil.toByteBufferEndianness(bytes);
+		int geometryType = buffer.getInt();
+		if (geometryType == GeometryType.POLYHEDRALSURFACE.getCode()) return unMarshall(XY.class, buffer);
+		if (geometryType == GeometryType.POLYHEDRALSURFACEZ.getCode()) return unMarshall(XYZ.class, buffer);
+		if (geometryType == GeometryType.POLYHEDRALSURFACEM.getCode()) return unMarshall(XYM.class, buffer);
+		if (geometryType == GeometryType.POLYHEDRALSURFACEM.getCode()) return unMarshall(XYZM.class, buffer);
+		return null;
+	}
+
+	public static <C extends XY> PolyhedralSurface<C> unMarshall(Class<C> type, ByteBuffer buffer) {
+		PolyhedralSurface<C> polyhedralSurface = new PolyhedralSurface(type);
+		int normalGroupSize = buffer.getInt();
+
+		for (int ng = 0; ng < normalGroupSize; ng++) {
+			buffer.get(); // endianess
+			buffer.getInt(); // 3 polygon
+			int faceSize = buffer.getInt();
+
+			NormalGroup<C> normalGroup = new NormalGroup<>();
+			for (int f = 0; f < faceSize; f++) {
+				CoordList<C> face = CoordList.unMarshall(type, buffer, true);
+				normalGroup.addFace(face);
+			}
+			polyhedralSurface.addNormalGroup(normalGroup);
+
+		}
 
 		return polyhedralSurface;
 	}

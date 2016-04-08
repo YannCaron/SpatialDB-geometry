@@ -8,6 +8,13 @@ package fr.cyann.geom.spatial.data; /**
  **/
 
 import fr.cyann.geom.spatial.data.coord.XY;
+import fr.cyann.geom.spatial.data.coord.XYM;
+import fr.cyann.geom.spatial.data.coord.XYZ;
+import fr.cyann.geom.spatial.data.coord.XYZM;
+import fr.cyann.geom.spatial.data.parsing.BinaryUtil;
+import fr.cyann.geom.spatial.data.parsing.GeometryType;
+
+import java.nio.ByteBuffer;
 
 /**
  * The ch.skyguide.geos.loader.geom.LineString definition.
@@ -79,6 +86,20 @@ public class LineString<C extends XY> extends Geometry {
 
         return new LineString<C>(type, list);
     }
+
+	public static LineString<? extends XY> unMarshall(byte[] bytes) {
+		ByteBuffer buffer = BinaryUtil.toByteBufferEndianness(bytes);
+		int geometryType = buffer.getInt();
+		if (geometryType == GeometryType.LINESTRING.getCode()) return unMarshall(XY.class, buffer);
+		if (geometryType == GeometryType.LINESTRINGZ.getCode()) return unMarshall(XYZ.class, buffer);
+		if (geometryType == GeometryType.LINESTRINGM.getCode()) return unMarshall(XYM.class, buffer);
+		if (geometryType == GeometryType.LINESTRINGZM.getCode()) return unMarshall(XYZM.class, buffer);
+		return null;
+	}
+
+	public static <C extends XY> LineString<C> unMarshall(Class<C> type, ByteBuffer buffer) {
+		return new LineString<C>(type, CoordList.unMarshall(type, buffer, false));
+	}
 
 
 }

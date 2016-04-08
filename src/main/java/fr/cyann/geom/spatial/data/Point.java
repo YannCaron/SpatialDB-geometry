@@ -11,6 +11,10 @@ import fr.cyann.geom.spatial.data.coord.XY;
 import fr.cyann.geom.spatial.data.coord.XYM;
 import fr.cyann.geom.spatial.data.coord.XYZ;
 import fr.cyann.geom.spatial.data.coord.XYZM;
+import fr.cyann.geom.spatial.data.parsing.BinaryUtil;
+import fr.cyann.geom.spatial.data.parsing.GeometryType;
+
+import java.nio.ByteBuffer;
 
 /**
  * The ch.skyguide.geos.loader.geom.Point definition.
@@ -66,12 +70,12 @@ public class Point<C extends XY> extends Geometry {
 		stringBuilder.append(')');
 	}
 
-	public static <C extends XY>Point<C> unMarshall(Class<C> type, String string) {
+	public static <C extends XY> Point<C> unMarshall(Class<C> type, String string) {
 		if (string == null) return null;
 		return unMarshall(type, new StringBuilder(string));
 	}
 
-	public static <C extends XY>Point<C> unMarshall(Class<C> type, StringBuilder stringBuilder) {
+	public static <C extends XY> Point<C> unMarshall(Class<C> type, StringBuilder stringBuilder) {
 		Parse.removeBlanks(stringBuilder);
 
 		Class<? extends XY> parsedType = getCoordType(stringBuilder, "POINT");
@@ -86,6 +90,20 @@ public class Point<C extends XY> extends Geometry {
 		Parse.removeBlanks(stringBuilder);
 		if (!Parse.consumeSymbol(stringBuilder, ')')) return null;
 		return new Point(coord);
+	}
+
+	public static Point<? extends XY> unMarshall(byte[] bytes) {
+		ByteBuffer buffer = BinaryUtil.toByteBufferEndianness(bytes);
+		int geometryType = buffer.getInt();
+		if (geometryType == GeometryType.POINT.getCode()) return unMarshall(XY.class, buffer);
+		if (geometryType == GeometryType.POINTZ.getCode()) return unMarshall(XYZ.class, buffer);
+		if (geometryType == GeometryType.POINTM.getCode()) return unMarshall(XYM.class, buffer);
+		if (geometryType == GeometryType.POINTZM.getCode()) return unMarshall(XYZM.class, buffer);
+		return null;
+	}
+
+	public static <C extends XY> Point<C> unMarshall(Class<C> type, ByteBuffer buffer) {
+		return new Point(BinaryUtil.unMarshallCoord(type, buffer));
 	}
 
 	public C getCoordinate() {
