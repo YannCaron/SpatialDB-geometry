@@ -14,7 +14,7 @@ import fr.cyann.geom.spatial.data.Marshallable;
  */
 public class XYM extends XY {
 
-	private final double m;
+	final double m;
 
 	public XYM(double x, double y, double m) {
 		super(x, y);

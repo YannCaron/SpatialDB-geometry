@@ -103,12 +103,20 @@ public class CoordList<C extends XY> implements Marshallable, Iterable<C> {
         return coords.size();
     }
 
-    // method
+	public boolean isClosed() {
+		return isClosed;
+	}
+
+	// method
     public CoordList<C> add(C xy) {
         coords.add(xy);
 	    return this;
     }
 
+	public CoordList<C> add(int index, C xy) {
+		coords.add(index, xy);
+		return this;
+	}
     public boolean removeAll(Collection<?> c) {
         return coords.removeAll(c);
     }

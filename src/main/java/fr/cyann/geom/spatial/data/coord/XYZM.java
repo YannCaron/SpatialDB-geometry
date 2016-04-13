@@ -12,7 +12,7 @@ package fr.cyann.geom.spatial.data.coord;/**
  */
 public class XYZM extends XYZ {
 
-	private final double m;
+	final double m;
 
 	public XYZM(double x, double y, double z, double m) {
 		super(x, y, z);

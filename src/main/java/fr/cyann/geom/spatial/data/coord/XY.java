@@ -18,7 +18,7 @@ import fr.cyann.geom.spatial.data.Marshallable;
  */
 public class XY implements Marshallable {
 
-    private final double x, y;
+    final double x, y;
 
     public XY(double x, double y) {
         this.x = x;
