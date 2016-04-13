@@ -147,8 +147,59 @@ public class LineString<C extends XY> extends Geometry {
 			}
 		}
 
-
 		return new LineString<XYZM>(lineString.getCoordinateType(), resCoord);
+	}
+
+	public static XYZM searchEpoch(LineString<XYZM> lineString, double search) {
+		List<XYZM> coords = lineString.getCoordinate().getCoords();
+
+		// contains point
+		XYZM first = coords.get(0);
+		XYZM last = coords.get(coords.size() - 1);
+
+		if (first.getM() <= search && last.getM() >= search) {
+			return binarySearch(lineString.getCoordinate().getCoords(), search);
+		}
+		return null;
+	}
+
+	private static XYZM binarySearch(List<XYZM> coords, double search) {
+
+		int begin = 0;
+		int end = coords.size() - 1;
+
+		while (begin <= end) {
+			int delta = end - begin;
+			int mid = delta / 2 + begin;
+			XYZM coord = coords.get(mid);
+
+			if (coord.getM() == search || delta == 0) {
+				return coord;
+			} else if (delta == 1) {
+				return calculateAlong(coords.get(begin), coords.get(end), search);
+			} else if (search < coord.getM()) {
+				end = mid;
+			} else {
+				begin = mid;
+			}
+
+		}
+
+		return null;
+
+	}
+
+	private static XYZM calculateAlong(XYZM v1, XYZM v2, double time) {
+		double proportion = (time - v1.getM()) / (v2.getM() - v1.getM());
+		if (Double.isInfinite(proportion)) {
+			proportion = 0.0;
+		}
+
+		double x = v1.getX() + proportion * (v2.getX() - v1.getX());
+		double y = v1.getY() + proportion * (v2.getY() - v1.getY());
+		double z = v1.getZ() + proportion * (v2.getZ() - v1.getZ());
+
+		return new XYZM(x, y, z, time);
 	}
 
 }
