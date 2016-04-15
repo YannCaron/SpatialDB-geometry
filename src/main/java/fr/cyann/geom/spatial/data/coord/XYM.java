@@ -14,10 +14,18 @@ import fr.cyann.geom.spatial.data.Marshallable;
  */
 public class XYM extends XY {
 
-	final double m;
+	protected double m;
 
 	public XYM(double x, double y, double m) {
 		super(x, y);
+		this.m = m;
+	}
+
+	public double getM() {
+		return m;
+	}
+
+	public void setM(double m) {
 		this.m = m;
 	}
 

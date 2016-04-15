@@ -18,7 +18,7 @@ import fr.cyann.geom.spatial.data.Marshallable;
  */
 public class XY implements Marshallable {
 
-    final double x, y;
+	protected double x, y;
 
     public XY(double x, double y) {
         this.x = x;
@@ -47,7 +47,15 @@ public class XY implements Marshallable {
         return y;
     }
 
-    @Override
+	public void setX(double x) {
+		this.x = x;
+	}
+
+	public void setY(double y) {
+		this.y = y;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;

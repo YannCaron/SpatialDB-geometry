@@ -103,6 +103,10 @@ public class LineString<C extends XY> extends Geometry {
 		return new LineString<C>(type, CoordList.unMarshall(type, buffer, false));
 	}
 
+	public static final double EARTH_RADIUS_KM = 6378137d;
+	public static final double EARTH_EQUATORIAL_PERIMETER_KM = 2.0d * Math.PI * EARTH_RADIUS_KM;
+	public static final double EARTH_EQUATORIAL_PERIMETER_DEG = EARTH_EQUATORIAL_PERIMETER_KM / 360;
+
 	public static LineString<XYZM> simplify(LineString<XYZM> lineString, double delta) {
 		class Bounds {
 			final int begin;
@@ -128,11 +132,17 @@ public class LineString<C extends XY> extends Geometry {
 			Bounds bound = bounds.pop();
 			XYZM a = coords.get(bound.begin);
 			XYZM b = coords.get(bound.end - 1);
+			XYZM ra = new XYZM(a.getX(), a.getY(), a.getZ() / EARTH_EQUATORIAL_PERIMETER_DEG, a.getM());
+			XYZM rb = new XYZM(b.getX(), b.getY(), b.getZ() / EARTH_EQUATORIAL_PERIMETER_DEG, b.getM());
 
 			double maxDist = 0;
 			int pivot = -1;
 			for (int i = bound.begin; i < bound.end; i++) {
-				double dist = coords.get(i).distanceToSegment(a, b);
+				XYZM c = coords.get(i);
+				XYZM rc = new XYZM(c.getX(), c.getY(), c.getZ() / EARTH_EQUATORIAL_PERIMETER_DEG, c.getM());
+
+				//double dist = c.distanceToSegment(a, b);
+				double dist = rc.distanceToSegment(ra, rb);
 				if (dist > delta && dist > maxDist) {
 					maxDist = dist;
 					pivot = i;

@@ -14,7 +14,7 @@ import fr.cyann.geom.spatial.data.Marshallable;
  */
 public class XYZ extends XY {
 
-	private final double z;
+	protected double z;
 
 	public XYZ(double x, double y, double z) {
 		super(x, y);
@@ -23,6 +23,10 @@ public class XYZ extends XY {
 
 	public double getZ() {
 		return z;
+	}
+
+	public void setZ(double z) {
+		this.z = z;
 	}
 
 	public static XYZ unMarshall(StringBuilder string) {
