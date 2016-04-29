@@ -6,8 +6,6 @@ import fr.cyann.geom.spatial.data.coord.XYZ;
 import fr.cyann.geom.spatial.data.coord.XYZM;
 import junit.framework.TestCase;
 
-import java.util.List;
-
 /**
  * Copyright (C) 06/03/16 Yann Caron aka cyann
  * <p>
@@ -46,7 +44,7 @@ public class LineStringTest extends TestCase {
 		assertEquals(pt4, LineString.unMarshall(XYZM.class, "LINESTRING ZM (10 20 30 3, 20 20 30 3)"));
 
 	}
-
+/*
 	public void testSimplify() throws Exception {
 
 		LineString<XYZM> lineString = LineString.unMarshall(XYZM.class, LINE_STRING);
@@ -80,5 +78,5 @@ public class LineStringTest extends TestCase {
 		double search = begin + (end - begin) / 2;
 		System.out.println("Found 0.5 = " + LineString.searchEpoch(simpLineString, search));
 
-	}
+	}*/
 }
