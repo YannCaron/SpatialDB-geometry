@@ -21,6 +21,8 @@ import java.nio.ByteBuffer;
  */
 public class Point<C extends XY> extends Geometry {
 
+	public static final String WKT_NAME = "POINT";
+
 	private final C coordinate;
 
 	public Point(C coordinate) {
@@ -62,7 +64,7 @@ public class Point<C extends XY> extends Geometry {
 
 	@Override
 	public void marshall(StringBuilder stringBuilder) {
-		stringBuilder.append("POINT");
+		stringBuilder.append(WKT_NAME);
 		appendType(stringBuilder);
 		stringBuilder.append(' ');
 		stringBuilder.append('(');
@@ -78,7 +80,7 @@ public class Point<C extends XY> extends Geometry {
 	public static <C extends XY> Point<C> unMarshall(Class<C> type, StringBuilder stringBuilder) {
 		Parse.removeBlanks(stringBuilder);
 
-		Class<? extends XY> parsedType = getCoordType(stringBuilder, "POINT");
+		Class<? extends XY> parsedType = getCoordType(stringBuilder, WKT_NAME);
 		if (type == null || !type.equals(parsedType)) return null;
 
 		Parse.removeBlanks(stringBuilder);

@@ -50,6 +50,11 @@ public abstract class Geometry<C extends XY> implements Marshallable {
 		if (geometryType == GeometryType.LINESTRINGM.getCode()) return LineString.unMarshall(XYM.class, buffer);
 		if (geometryType == GeometryType.LINESTRINGZM.getCode()) return LineString.unMarshall(XYZM.class, buffer);
 
+		if (geometryType == GeometryType.MULTILINESTRING.getCode()) return MultiLineString.unMarshall(XY.class, buffer);
+		if (geometryType == GeometryType.MULTILINESTRINGZ.getCode()) return MultiLineString.unMarshall(XYZ.class, buffer);
+		if (geometryType == GeometryType.MULTILINESTRINGM.getCode()) return MultiLineString.unMarshall(XYM.class, buffer);
+		if (geometryType == GeometryType.MULTILINESTRINGZM.getCode()) return MultiLineString.unMarshall(XYZM.class, buffer);
+
 		if (geometryType == GeometryType.POLYGON.getCode()) return Polygon.unMarshall(XY.class, buffer);
 		if (geometryType == GeometryType.POLYGONZ.getCode()) return Polygon.unMarshall(XYZ.class, buffer);
 		if (geometryType == GeometryType.POLYGONM.getCode()) return Polygon.unMarshall(XYM.class, buffer);
@@ -86,6 +91,15 @@ public abstract class Geometry<C extends XY> implements Marshallable {
             return LineString.unMarshall(XYM.class, stringBuilder);
         } else if (Parse.nextSymbol(stringBuilder, "LINESTRING")) {
             return LineString.unMarshall(XY.class, stringBuilder);
+
+        } else if (Parse.nextSymbol(stringBuilder, "MULTILINESTRINGZM") || Parse.nextSymbol(stringBuilder, "MULTILINESTRING ZM")) {
+	        return MultiLineString.unMarshall(XYZM.class, stringBuilder);
+        } else if (Parse.nextSymbol(stringBuilder, "MULTILINESTRINGZ") || Parse.nextSymbol(stringBuilder, "MULTILINESTRING Z")) {
+	        return MultiLineString.unMarshall(XYZ.class, stringBuilder);
+        } else if (Parse.nextSymbol(stringBuilder, "MULTILINESTRINGM") || Parse.nextSymbol(stringBuilder, "MULTILINESTRING M")) {
+	        return MultiLineString.unMarshall(XYM.class, stringBuilder);
+        } else if (Parse.nextSymbol(stringBuilder, "MULTILINESTRING")) {
+	        return MultiLineString.unMarshall(XY.class, stringBuilder);
 
         } else if (Parse.nextSymbol(stringBuilder, "POLYGONZM") || Parse.nextSymbol(stringBuilder, "POLYGON ZM")) {
             return Polygon.unMarshall(XYZM.class, stringBuilder);

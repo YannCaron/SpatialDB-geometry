@@ -23,6 +23,8 @@ import java.util.List;
  */
 public class Polygon<C extends XY> extends Geometry {
 
+	public static final String WKT_NAME = "POLYGON";
+
 	private final CoordList<C> exterior;
     private final List<CoordList<C>> interiors;
 
@@ -45,10 +47,10 @@ public class Polygon<C extends XY> extends Geometry {
 
         // 'POLYGON'
         Parse.removeBlanks(stringBuilder);
-	    Class<? extends XY> parsedType = getCoordType(stringBuilder, "POLYGON");
+	    Class<? extends XY> parsedType = getCoordType(stringBuilder, WKT_NAME);
 		if (type == null || !type.equals(parsedType)) return null;
 
-        return unMarshall(type, stringBuilder);
+        return unMarshallData(type, stringBuilder);
     }
 
 	static <C extends XY>Polygon<C> unMarshallData(Class<C> type, StringBuilder stringBuilder) {
@@ -125,7 +127,7 @@ public class Polygon<C extends XY> extends Geometry {
 
     @Override
     public void marshall(StringBuilder stringBuilder) throws BadGeometryException {
-        stringBuilder.append("POLYGON");
+        stringBuilder.append(WKT_NAME);
 	    appendType(stringBuilder);
         stringBuilder.append(' ');
         marshallData(stringBuilder);

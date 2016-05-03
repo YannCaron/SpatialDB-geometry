@@ -116,7 +116,7 @@ public class PolyhedralSurface<C extends XY> extends Geometry {
 			buffer.get(); // endianess
 			buffer.getInt(); // geometry type
 
-			Polygon<C> polygon = (Polygon<C>) Polygon.unMarshall(type, buffer);
+			Polygon<C> polygon = Polygon.unMarshall(type, buffer);
 			polyhedralSurface.addPolygon(polygon);
 		}
 

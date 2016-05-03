@@ -21,6 +21,8 @@ import java.nio.ByteBuffer;
  */
 public class LineString<C extends XY> extends Geometry {
 
+	public static final String WKT_NAME = "LINESTRING";
+
 	private final CoordList<C> coordinate;
 
 	public LineString(Class<C> type, CoordList<C> coordinate) {
@@ -63,7 +65,7 @@ public class LineString<C extends XY> extends Geometry {
 
 	@Override
 	public void marshall(StringBuilder stringBuilder) throws BadGeometryException {
-		stringBuilder.append("LINESTRING");
+		stringBuilder.append(WKT_NAME);
 		appendType(stringBuilder);
 		stringBuilder.append(' ');
 		coordinate.marshall(stringBuilder);
@@ -78,9 +80,15 @@ public class LineString<C extends XY> extends Geometry {
 
 		// LINESTRING
 		Parse.removeBlanks(stringBuilder);
-		Class<? extends XY> parsedType = getCoordType(stringBuilder, "LINESTRING");
+		Class<? extends XY> parsedType = getCoordType(stringBuilder, WKT_NAME);
 		if (type == null || !type.equals(parsedType)) return null;
 
+		return unMarshallData(type, stringBuilder);
+	}
+
+	static <C extends XY> LineString<C> unMarshallData(Class<C> type, StringBuilder stringBuilder){
+
+		// <coordlist>
 		CoordList<C> list = CoordList.unMarshall(type, stringBuilder, false);
 		if (list == null) return null;
 
