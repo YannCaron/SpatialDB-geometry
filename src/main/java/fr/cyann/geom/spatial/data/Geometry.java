@@ -12,21 +12,21 @@ import java.nio.ByteBuffer;
 /**
  * Created by cyann on 20/12/15.
  */
-public abstract class Geometry<C extends XY> implements Marshallable {
+public abstract class Geometry<C extends XY> implements Marshallable, GeoJsonMarshallable {
 
     public static final int GPS_SRID = 4326;
 
     protected final Class<C> type;
 
-    public Geometry(Class<C> type) {
+    public Geometry (Class<C> type) {
         this.type = type;
     }
 
-    public Class<C> getCoordinateType() {
+    public Class<C> getCoordinateType () {
         return type;
     }
 
-    void appendType(StringBuilder stringBuilder) {
+    void appendType (StringBuilder stringBuilder) {
         if (XYZ.class == type) {
             stringBuilder.append("Z");
         } else if (XYM.class == type) {
@@ -36,43 +36,83 @@ public abstract class Geometry<C extends XY> implements Marshallable {
         }
     }
 
-	public static <C extends XY> Geometry<C> unMarshall(byte[] bytes) {
-		ByteBuffer buffer = BinaryUtil.toByteBufferEndianness(bytes);
-		int geometryType = buffer.getInt();
+    public static <C extends XY> Geometry<C> unMarshall (byte[] bytes) {
+        ByteBuffer buffer = BinaryUtil.toByteBufferEndianness(bytes);
+        int geometryType = buffer.getInt();
 
-		if (geometryType == GeometryType.POINT.getCode()) return Point.unMarshall(XY.class, buffer);
-		if (geometryType == GeometryType.POINTZ.getCode()) return Point.unMarshall(XYZ.class, buffer);
-		if (geometryType == GeometryType.POINTM.getCode()) return Point.unMarshall(XYM.class, buffer);
-		if (geometryType == GeometryType.POINTZM.getCode()) return Point.unMarshall(XYZM.class, buffer);
+        if (geometryType == GeometryType.POINT.getCode()) {
+            return Point.unMarshall(XY.class, buffer);
+        }
+        if (geometryType == GeometryType.POINTZ.getCode()) {
+            return Point.unMarshall(XYZ.class, buffer);
+        }
+        if (geometryType == GeometryType.POINTM.getCode()) {
+            return Point.unMarshall(XYM.class, buffer);
+        }
+        if (geometryType == GeometryType.POINTZM.getCode()) {
+            return Point.unMarshall(XYZM.class, buffer);
+        }
 
-		if (geometryType == GeometryType.LINESTRING.getCode()) return LineString.unMarshall(XY.class, buffer);
-		if (geometryType == GeometryType.LINESTRINGZ.getCode()) return LineString.unMarshall(XYZ.class, buffer);
-		if (geometryType == GeometryType.LINESTRINGM.getCode()) return LineString.unMarshall(XYM.class, buffer);
-		if (geometryType == GeometryType.LINESTRINGZM.getCode()) return LineString.unMarshall(XYZM.class, buffer);
+        if (geometryType == GeometryType.LINESTRING.getCode()) {
+            return LineString.unMarshall(XY.class, buffer);
+        }
+        if (geometryType == GeometryType.LINESTRINGZ.getCode()) {
+            return LineString.unMarshall(XYZ.class, buffer);
+        }
+        if (geometryType == GeometryType.LINESTRINGM.getCode()) {
+            return LineString.unMarshall(XYM.class, buffer);
+        }
+        if (geometryType == GeometryType.LINESTRINGZM.getCode()) {
+            return LineString.unMarshall(XYZM.class, buffer);
+        }
 
-		if (geometryType == GeometryType.MULTILINESTRING.getCode()) return MultiLineString.unMarshall(XY.class, buffer);
-		if (geometryType == GeometryType.MULTILINESTRINGZ.getCode()) return MultiLineString.unMarshall(XYZ.class, buffer);
-		if (geometryType == GeometryType.MULTILINESTRINGM.getCode()) return MultiLineString.unMarshall(XYM.class, buffer);
-		if (geometryType == GeometryType.MULTILINESTRINGZM.getCode()) return MultiLineString.unMarshall(XYZM.class, buffer);
+        if (geometryType == GeometryType.MULTILINESTRING.getCode()) {
+            return MultiLineString.unMarshall(XY.class, buffer);
+        }
+        if (geometryType == GeometryType.MULTILINESTRINGZ.getCode()) {
+            return MultiLineString.unMarshall(XYZ.class, buffer);
+        }
+        if (geometryType == GeometryType.MULTILINESTRINGM.getCode()) {
+            return MultiLineString.unMarshall(XYM.class, buffer);
+        }
+        if (geometryType == GeometryType.MULTILINESTRINGZM.getCode()) {
+            return MultiLineString.unMarshall(XYZM.class, buffer);
+        }
 
-		if (geometryType == GeometryType.POLYGON.getCode()) return Polygon.unMarshall(XY.class, buffer);
-		if (geometryType == GeometryType.POLYGONZ.getCode()) return Polygon.unMarshall(XYZ.class, buffer);
-		if (geometryType == GeometryType.POLYGONM.getCode()) return Polygon.unMarshall(XYM.class, buffer);
-		if (geometryType == GeometryType.POLYGONZM.getCode()) return Polygon.unMarshall(XYZM.class, buffer);
+        if (geometryType == GeometryType.POLYGON.getCode()) {
+            return Polygon.unMarshall(XY.class, buffer);
+        }
+        if (geometryType == GeometryType.POLYGONZ.getCode()) {
+            return Polygon.unMarshall(XYZ.class, buffer);
+        }
+        if (geometryType == GeometryType.POLYGONM.getCode()) {
+            return Polygon.unMarshall(XYM.class, buffer);
+        }
+        if (geometryType == GeometryType.POLYGONZM.getCode()) {
+            return Polygon.unMarshall(XYZM.class, buffer);
+        }
 
-		if (geometryType == GeometryType.POLYHEDRALSURFACE.getCode()) return PolyhedralSurface.unMarshall(XY.class, buffer);
-		if (geometryType == GeometryType.POLYHEDRALSURFACEZ.getCode()) return PolyhedralSurface.unMarshall(XYZ.class, buffer);
-		if (geometryType == GeometryType.POLYHEDRALSURFACEM.getCode()) return PolyhedralSurface.unMarshall(XYM.class, buffer);
-		if (geometryType == GeometryType.POLYHEDRALSURFACEM.getCode()) return PolyhedralSurface.unMarshall(XYZM.class, buffer);
+        if (geometryType == GeometryType.POLYHEDRALSURFACE.getCode()) {
+            return PolyhedralSurface.unMarshall(XY.class, buffer);
+        }
+        if (geometryType == GeometryType.POLYHEDRALSURFACEZ.getCode()) {
+            return PolyhedralSurface.unMarshall(XYZ.class, buffer);
+        }
+        if (geometryType == GeometryType.POLYHEDRALSURFACEM.getCode()) {
+            return PolyhedralSurface.unMarshall(XYM.class, buffer);
+        }
+        if (geometryType == GeometryType.POLYHEDRALSURFACEM.getCode()) {
+            return PolyhedralSurface.unMarshall(XYZM.class, buffer);
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-    public static <C extends XY> Geometry<C> unMarshall(String string) {
+    public static <C extends XY> Geometry<C> unMarshall (String string) {
         return unMarshall(new StringBuilder(string));
     }
 
-    public static <C extends XY> Geometry<C> unMarshall(StringBuilder stringBuilder) {
+    public static <C extends XY> Geometry<C> unMarshall (StringBuilder stringBuilder) {
 
         if (Parse.nextSymbol(stringBuilder, "POINTZM") || Parse.nextSymbol(stringBuilder, "POINT ZM")) {
             return Point.unMarshall(XYZM.class, stringBuilder);
@@ -93,13 +133,13 @@ public abstract class Geometry<C extends XY> implements Marshallable {
             return LineString.unMarshall(XY.class, stringBuilder);
 
         } else if (Parse.nextSymbol(stringBuilder, "MULTILINESTRINGZM") || Parse.nextSymbol(stringBuilder, "MULTILINESTRING ZM")) {
-	        return MultiLineString.unMarshall(XYZM.class, stringBuilder);
+            return MultiLineString.unMarshall(XYZM.class, stringBuilder);
         } else if (Parse.nextSymbol(stringBuilder, "MULTILINESTRINGZ") || Parse.nextSymbol(stringBuilder, "MULTILINESTRING Z")) {
-	        return MultiLineString.unMarshall(XYZ.class, stringBuilder);
+            return MultiLineString.unMarshall(XYZ.class, stringBuilder);
         } else if (Parse.nextSymbol(stringBuilder, "MULTILINESTRINGM") || Parse.nextSymbol(stringBuilder, "MULTILINESTRING M")) {
-	        return MultiLineString.unMarshall(XYM.class, stringBuilder);
+            return MultiLineString.unMarshall(XYM.class, stringBuilder);
         } else if (Parse.nextSymbol(stringBuilder, "MULTILINESTRING")) {
-	        return MultiLineString.unMarshall(XY.class, stringBuilder);
+            return MultiLineString.unMarshall(XY.class, stringBuilder);
 
         } else if (Parse.nextSymbol(stringBuilder, "POLYGONZM") || Parse.nextSymbol(stringBuilder, "POLYGON ZM")) {
             return Polygon.unMarshall(XYZM.class, stringBuilder);
@@ -123,8 +163,8 @@ public abstract class Geometry<C extends XY> implements Marshallable {
         }
     }
 
-	//public static Class<? extends XY>
-    static Class<? extends XY> getCoordType(StringBuilder stringBuilder, String prefix) {
+    //public static Class<? extends XY>
+    static Class<? extends XY> getCoordType (StringBuilder stringBuilder, String prefix) {
         if (Parse.consumeSymbol(stringBuilder, prefix + "ZM") || Parse.consumeSymbol(stringBuilder, prefix + " ZM")) {
             return XYZM.class;
         } else if (Parse.consumeSymbol(stringBuilder, prefix + "M") || Parse.consumeSymbol(stringBuilder, prefix + " M")) {
@@ -138,7 +178,7 @@ public abstract class Geometry<C extends XY> implements Marshallable {
         }
     }
 
-    static <C extends XY> C unmarshallCoord(Class<C> type, StringBuilder stringBuilder) {
+    static <C extends XY> C unmarshallCoord (Class<C> type, StringBuilder stringBuilder) {
         XY coord = null;
         if (XY.class == type) {
             coord = XY.unMarshall(stringBuilder);
@@ -156,7 +196,7 @@ public abstract class Geometry<C extends XY> implements Marshallable {
     }
 
     @Override
-    public String toString() {
+    public String toString () {
         StringBuilder string = new StringBuilder();
         try {
             marshall(string);
@@ -166,7 +206,13 @@ public abstract class Geometry<C extends XY> implements Marshallable {
         return string.toString();
     }
 
-    public String toSpatialiteQuery(int srid) throws BadGeometryException {
+    public String toGeoJson () {
+        StringBuilder string = new StringBuilder();
+        marshallToGeoJson(string);
+        return string.toString();
+    }
+
+    public String toSpatialiteQuery (int srid) throws BadGeometryException {
         StringBuilder string = new StringBuilder();
         string.append("ST_GeomFromText('");
         marshall(string);

@@ -15,23 +15,25 @@ public class GeometryCollection extends Geometry {
 
     private final List<Geometry> geometries;
 
-    public GeometryCollection() {
-	    super(XY.class);
+    public GeometryCollection () {
+        super(XY.class);
         this.geometries = new LinkedList<>();
     }
 
-    public void addGeometry(Geometry geometry) {
+    public void addGeometry (Geometry geometry) {
         this.geometries.add(geometry);
     }
 
     @Override
-    public void marshall(StringBuilder stringBuilder) throws BadGeometryException {
+    public void marshall (StringBuilder stringBuilder) throws BadGeometryException {
         stringBuilder.append("GEOMETRYCOLLECTION ");
         stringBuilder.append("(");
 
         boolean tail = false;
         for (Geometry geometry : geometries) {
-            if (tail) stringBuilder.append(", ");
+            if (tail) {
+                stringBuilder.append(", ");
+            }
             geometry.marshall(stringBuilder);
             tail = true;
         }
@@ -39,22 +41,44 @@ public class GeometryCollection extends Geometry {
         stringBuilder.append(")");
     }
 
-    public static GeometryCollection unMarshall(String string) {
-        if (string == null) return null;
+    @Override
+    public void marshallToGeoJson (StringBuilder stringBuilder) {
+        boolean first = true;
+
+        stringBuilder.append('{');
+        stringBuilder.append("\"type\": \"GeometryCollection\", \"geometries\": ");
+        for (Geometry<?> geometry : geometries) {
+            if (!first) {
+                stringBuilder.append(", ");
+            }
+            geometry.marshallToGeoJson(stringBuilder);
+            first = false;
+        }
+        stringBuilder.append('}');
+    }
+
+    public static GeometryCollection unMarshall (String string) {
+        if (string == null) {
+            return null;
+        }
         return unMarshall(new StringBuilder(string));
     }
 
-    public static GeometryCollection unMarshall(StringBuilder string) {
+    public static GeometryCollection unMarshall (StringBuilder string) {
 
         // 'GEOMETRYCOLLECTION'
         Parse.removeBlanks(string);
-        if (!Parse.consumeSymbol(string, "GEOMETRYCOLLECTION")) return null;
+        if (!Parse.consumeSymbol(string, "GEOMETRYCOLLECTION")) {
+            return null;
+        }
 
         GeometryCollection geometryCollection = new GeometryCollection();
 
         // '('
         Parse.removeBlanks(string);
-        if (!Parse.consumeSymbol(string, '(')) return null;
+        if (!Parse.consumeSymbol(string, '(')) {
+            return null;
+        }
 
         // <geometry>*
         while (string.length() > 0) {
@@ -63,42 +87,62 @@ public class GeometryCollection extends Geometry {
             Parse.removeBlanks(string);
             Geometry geometry;
             geometry = GeometryCollection.unMarshall(string);
-            if (geometry == null)
+            if (geometry == null) {
                 geometry = Point.unMarshall(XY.class, string);
-	        if (geometry == null)
-		        geometry = Point.unMarshall(XYZ.class, string);
-	        if (geometry == null)
-		        geometry = Point.unMarshall(XYM.class, string);
-	        if (geometry == null)
-		        geometry = Point.unMarshall(XYZM.class, string);
-            if (geometry == null)
+            }
+            if (geometry == null) {
+                geometry = Point.unMarshall(XYZ.class, string);
+            }
+            if (geometry == null) {
+                geometry = Point.unMarshall(XYM.class, string);
+            }
+            if (geometry == null) {
+                geometry = Point.unMarshall(XYZM.class, string);
+            }
+            if (geometry == null) {
                 geometry = LineString.unMarshall(XY.class, string);
-	        if (geometry == null)
-		        geometry = LineString.unMarshall(XYZ.class, string);
-	        if (geometry == null)
-		        geometry = LineString.unMarshall(XYM.class, string);
-	        if (geometry == null)
-		        geometry = LineString.unMarshall(XYZM.class, string);
-            if (geometry == null)
+            }
+            if (geometry == null) {
+                geometry = LineString.unMarshall(XYZ.class, string);
+            }
+            if (geometry == null) {
+                geometry = LineString.unMarshall(XYM.class, string);
+            }
+            if (geometry == null) {
+                geometry = LineString.unMarshall(XYZM.class, string);
+            }
+            if (geometry == null) {
                 geometry = Polygon.unMarshall(XY.class, string);
-	        if (geometry == null)
-		        geometry = Polygon.unMarshall(XYZ.class, string);
-	        if (geometry == null)
-		        geometry = Polygon.unMarshall(XYM.class, string);
-	        if (geometry == null)
-		        geometry = Polygon.unMarshall(XYZM.class, string);
-	        if (geometry == null)
-		        geometry = PolyhedralSurface.unMarshall(XY.class, string);
-	        if (geometry == null)
-		        geometry = PolyhedralSurface.unMarshall(XYZ.class, string);
-	        if (geometry == null)
-		        geometry = PolyhedralSurface.unMarshall(XYM.class, string);
-	        if (geometry == null)
-		        geometry = PolyhedralSurface.unMarshall(XYZM.class, string);
-            if (geometry == null) return null;
+            }
+            if (geometry == null) {
+                geometry = Polygon.unMarshall(XYZ.class, string);
+            }
+            if (geometry == null) {
+                geometry = Polygon.unMarshall(XYM.class, string);
+            }
+            if (geometry == null) {
+                geometry = Polygon.unMarshall(XYZM.class, string);
+            }
+            if (geometry == null) {
+                geometry = PolyhedralSurface.unMarshall(XY.class, string);
+            }
+            if (geometry == null) {
+                geometry = PolyhedralSurface.unMarshall(XYZ.class, string);
+            }
+            if (geometry == null) {
+                geometry = PolyhedralSurface.unMarshall(XYM.class, string);
+            }
+            if (geometry == null) {
+                geometry = PolyhedralSurface.unMarshall(XYZM.class, string);
+            }
+            if (geometry == null) {
+                return null;
+            }
             geometryCollection.addGeometry(geometry);
 
-            if (!Parse.nextSymbol(string, ',')) break;
+            if (!Parse.nextSymbol(string, ',')) {
+                break;
+            }
 
             // ','
             Parse.removeBlanks(string);
@@ -108,7 +152,10 @@ public class GeometryCollection extends Geometry {
 
         // ')'
         Parse.removeBlanks(string);
-        if (!Parse.consumeSymbol(string, ')')) return null;
+        if (!Parse.consumeSymbol(string, ')')) {
+            return null;
+        }
         return geometryCollection;
     }
+
 }

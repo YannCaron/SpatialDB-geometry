@@ -44,6 +44,17 @@ public class XYM extends XY {
 		marshallNumber(stringBuilder, m);
 	}
 
+    @Override
+    public void marshallToGeoJson (StringBuilder stringBuilder) {
+        stringBuilder.append('[');
+        stringBuilder.append(x);
+        stringBuilder.append(", ");
+        stringBuilder.append(y);
+        stringBuilder.append(", ");
+        stringBuilder.append(m);
+        stringBuilder.append(']');
+    }
+
 	@Override
 	public String toString() {
 		return "XYZM{" +

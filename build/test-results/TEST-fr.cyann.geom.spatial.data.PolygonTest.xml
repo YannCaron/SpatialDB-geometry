@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="fr.cyann.geom.spatial.data.PolygonTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2018-06-29T12:44:00" hostname="cyann-SH67H3" time="0.015">
+  <properties/>
+  <testcase name="testToGeoJson" classname="fr.cyann.geom.spatial.data.PolygonTest" time="0.013"/>
+  <testcase name="testUnMarshallBinary" classname="fr.cyann.geom.spatial.data.PolygonTest" time="0.0"/>
+  <testcase name="testMarshall" classname="fr.cyann.geom.spatial.data.PolygonTest" time="0.0"/>
+  <testcase name="testUnMarshall" classname="fr.cyann.geom.spatial.data.PolygonTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

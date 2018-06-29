@@ -10,22 +10,22 @@ package fr.cyann.geom.spatial.data.coord;
  * Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
  *
  */
-
+import fr.cyann.geom.spatial.data.GeoJsonMarshallable;
 import fr.cyann.geom.spatial.data.Marshallable;
 
 /**
  * The ch.skyguide.geos.loader.geom.XY definition.
  */
-public class XY implements Marshallable {
+public class XY implements Marshallable, GeoJsonMarshallable {
 
-	protected double x, y;
+    protected double x, y;
 
-    public XY(double x, double y) {
+    public XY (double x, double y) {
         this.x = x;
         this.y = y;
     }
 
-    public static XY unMarshall(StringBuilder string) {
+    public static XY unMarshall (StringBuilder string) {
         Parse.removeBlanks(string);
         Double x = Parse.consumeDouble(string);
         if (x == null) {
@@ -39,24 +39,24 @@ public class XY implements Marshallable {
         return new XY(x, y);
     }
 
-    public double getX() {
+    public double getX () {
         return x;
     }
 
-    public double getY() {
+    public double getY () {
         return y;
     }
 
-	public void setX(double x) {
-		this.x = x;
-	}
+    public void setX (double x) {
+        this.x = x;
+    }
 
-	public void setY(double y) {
-		this.y = y;
-	}
+    public void setY (double y) {
+        this.y = y;
+    }
 
-	@Override
-    public boolean equals(Object o) {
+    @Override
+    public boolean equals (Object o) {
         if (this == o) {
             return true;
         }
@@ -74,7 +74,7 @@ public class XY implements Marshallable {
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode () {
         int result;
         long temp;
         temp = Double.doubleToLongBits(x);
@@ -84,7 +84,7 @@ public class XY implements Marshallable {
         return result;
     }
 
-    protected void marshallNumber(StringBuilder string, double number) {
+    protected void marshallNumber (StringBuilder string, double number) {
         if (number == Math.round(number)) {
             string.append((int) number);
         } else {
@@ -93,14 +93,23 @@ public class XY implements Marshallable {
     }
 
     @Override
-    public void marshall(StringBuilder stringBuilder) {
+    public void marshall (StringBuilder stringBuilder) {
         marshallNumber(stringBuilder, x);
         stringBuilder.append(' ');
         marshallNumber(stringBuilder, y);
     }
 
     @Override
-    public String toString() {
+    public void marshallToGeoJson (StringBuilder stringBuilder) {
+        stringBuilder.append('[');
+        stringBuilder.append(x);
+        stringBuilder.append(", ");
+        stringBuilder.append(y);
+        stringBuilder.append(']');
+    }
+
+    @Override
+    public String toString () {
         return "XYZM{"
                 + "x=" + x
                 + ", y=" + y
