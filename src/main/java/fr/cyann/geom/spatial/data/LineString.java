@@ -82,7 +82,7 @@ public class LineString<C extends XY> extends Geometry {
     @Override
     public void marshallToGeoJson (StringBuilder stringBuilder) {
         stringBuilder.append('{');
-        stringBuilder.append("\"type\": \"LineString\", \"coordinated\": ");
+        stringBuilder.append("\"type\": \"LineString\", \"coordinates\": ");
         coordinate.marshallToGeoJson(stringBuilder);
         stringBuilder.append('}');
     }

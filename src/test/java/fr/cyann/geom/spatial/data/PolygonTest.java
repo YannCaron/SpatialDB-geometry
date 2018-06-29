@@ -43,6 +43,7 @@ public class PolygonTest extends TestCase {
 
     public void testToGeoJson () throws Exception {
         String json = Polygon.unMarshall(XY.class, STRING).toGeoJson();
+        System.out.println(json);
         
         assertEquals(json, JSON);
     }
