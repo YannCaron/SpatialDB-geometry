@@ -184,15 +184,15 @@ public class MultiLineString<C extends XY> extends Geometry {
 
         stringBuilder.append('{');
         stringBuilder.append("\"type\": \"MultiLineString\", \"coordinates\": ");
+        stringBuilder.append('[');
         for (LineString<?> lineString : lineStrings) {
             if (!first) {
                 stringBuilder.append(", ");
             }
-            stringBuilder.append('[');
             lineString.getCoordinate().marshallToGeoJson(stringBuilder);
-            stringBuilder.append(']');
             first = false;
         }
+        stringBuilder.append(']');
         stringBuilder.append('}');
     }
 
