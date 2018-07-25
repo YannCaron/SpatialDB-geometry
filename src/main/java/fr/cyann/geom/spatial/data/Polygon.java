@@ -20,6 +20,7 @@ import fr.cyann.geom.spatial.data.parsing.GeometryType;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * The ch.skyguide.geos.loader.geom.LineString definition.
@@ -98,6 +99,47 @@ public class Polygon<C extends XY> extends Geometry {
         }
 
         return polygon;
+    }
+
+    @Override
+    public int hashCode () {
+        int hash = 5;
+        hash = 17 * hash + Objects.hashCode(this.exterior);
+        hash = 17 * hash + Objects.hashCode(this.interiors);
+        return hash;
+    }
+
+    @Override
+    public boolean equals (Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Polygon<?> other = (Polygon<?>) obj;
+
+        if (interiors == null && other.interiors != null) {
+            return false;
+        }
+        if (interiors.size() != other.interiors.size()) {
+            return false;
+        }
+
+        if (!this.exterior.equals(other.exterior)) {
+            return false;
+        }
+
+        for (int i = 0; i < interiors.size(); i++) {
+            if (!interiors.get(i).equals(other.interiors.get(i))) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public static Polygon<? extends XY> unMarshall (byte[] bytes) {

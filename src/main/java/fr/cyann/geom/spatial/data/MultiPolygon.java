@@ -92,6 +92,8 @@ public class MultiPolygon<C extends XY> extends Geometry {
     }
 
     public static MultiPolygon<? extends XY> unMarshall (byte[] bytes) {
+        System.out.println("enter unmarshall");
+        
         ByteBuffer buffer = BinaryUtil.toByteBufferEndianness(bytes);
         int geometryType = buffer.getInt();
         if (geometryType == GeometryType.MULTIPOLYGON.getCode()) {
@@ -110,11 +112,14 @@ public class MultiPolygon<C extends XY> extends Geometry {
     }
 
     public static <C extends XY> MultiPolygon<C> unMarshall (Class<C> type, ByteBuffer buffer) {
+        System.out.println("enter unmarshall with type");
         MultiPolygon<C> multiPolygon = new MultiPolygon<>(type);
 
         int size = buffer.getInt();
+        System.out.println("size: " + size);
 
         for (int i = 1; i < size; i++) {
+            System.out.println("unmarshall polygon: " + i);
             buffer.get(); // endianess
             buffer.getInt(); // geometry type
 
