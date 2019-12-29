@@ -1,34 +1,12 @@
-group 'ch.skyguide.geos.loader.sector'
-version '1.0-SNAPSHOT'
-
 apply plugin: 'java'
+apply plugin: 'jacoco'
 
-sourceCompatibility = 1.8
+version "1.0.1"
 
 repositories {
-    mavenCentral()
+    jcenter()
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.11'
-}
-
-test {
-    testLogging {
-        // Make sure output from
-        // standard out or error is shown
-        // in Gradle output.
-        showStandardStreams = true
- 
-        // Or we use events method:
-        // events 'standard_out', 'standard_error'
- 
-        // Or set property events:
-        // events = ['standard_out', 'standard_error']
- 
-        // Instead of string values we can
-        // use enum values:
-        // events org.gradle.api.tasks.testing.logging.TestLogEvent.STANDARD_OUT,
-        //        org.gradle.api.tasks.testing.logging.TestLogEvent.STANDARD_ERROR,
-    }
+    testCompile 'junit:junit:4.12'
 }

@@ -11,6 +11,7 @@ import java.nio.ByteBuffer;
 
 /**
  * Created by cyann on 20/12/15.
+ * @param <C>
  */
 public abstract class Geometry<C extends XY> implements Marshallable, GeoJsonMarshallable {
 
@@ -216,8 +217,11 @@ public abstract class Geometry<C extends XY> implements Marshallable, GeoJsonMar
         StringBuilder string = new StringBuilder();
         string.append("ST_GeomFromText('");
         marshall(string);
-        string.append("', " + srid + ")");
+        string.append("', ").append(srid).append(")");
         return string.toString();
     }
-
+    
+    public String toSpatialiteQuery () throws BadGeometryException {
+        return toSpatialiteQuery(GPS_SRID);
+    }
 }
