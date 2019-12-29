@@ -48,7 +48,7 @@ Add it in your root build.gradle at the end of repositories:
 		implementation 'com.github.YannCaron:SpatialDB-geometry:<TAG_NAME>'
 	}
 ```
-> **note:** Replace <TAG_NAME> by the project version e.g. "1.0.1"
+> **note:** Replace <TAG_NAME> by the project version e.g. "1.0.2"
 > **see**: JitPack [gradle](https://jitpack.io/#gradle) documentation
 
 ## Maven
@@ -74,7 +74,7 @@ Add it in your root build.gradle at the end of repositories:
 	</dependency>
 ```
 
-> **note:** Replace "TAG_NAME" by the project version e.g. "1.0.1"
+> **note:** Replace "TAG_NAME" by the project version e.g. "1.0.2"
 > **see**: JitPack [maven](https://jitpack.io/#maven) documentation
 
 
