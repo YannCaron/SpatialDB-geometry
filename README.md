@@ -26,7 +26,7 @@ Supported Coordinates:
 - XYM
 - XYZM
 
-# Usage
+# Package
 
 Use [JitPack](https://jitpack.io/) for Maven / Gradle package managers
 
