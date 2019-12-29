@@ -39,7 +39,3 @@ gradle/
 /*/build/
 /netbeans-gradle-default-models/gradle-api/
 /.nb-gradle-properties
-
-# Directories left from old Ant project
-/build/
-/nbproject/private/
