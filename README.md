@@ -34,7 +34,7 @@ Use [JitPack](https://jitpack.io/) for Maven / Gradle package managers
 **Step 1.** Add the JitPack repository to your build file
 Add it in your root build.gradle at the end of repositories:
 
-```css
+```bash
 	repositories {
 		...
 		maven { url 'https://jitpack.io' }
@@ -43,7 +43,7 @@ Add it in your root build.gradle at the end of repositories:
 
 **Step 2.** Add the dependency
 
-```css
+```bash
 	dependencies {
 		implementation 'com.github.YannCaron:SpatialDB-geometry:<TAG_NAME>'
 	}
@@ -55,7 +55,7 @@ Add it in your root build.gradle at the end of repositories:
 **Step 1.** Add the JitPack repository to your build file
 Add it in your root build.gradle at the end of repositories:
 
-```markup
+```xml
 	<repositories>
 		<repository>
 		    <id>jitpack.io</id>
@@ -66,7 +66,7 @@ Add it in your root build.gradle at the end of repositories:
 
 **Step 2.** Add the dependency
 
-```markup
+```xml
 	<dependency>
 	    <groupId>com.github.YannCaron</groupId>
 	    <artifactId>SpatialDB-geometry</artifactId>
