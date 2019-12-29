@@ -4,13 +4,13 @@ This java library to convert spatial databases geometries from text to binaries 
 
 Supported databases:
 - Spatialite
-- PostGis
+- PostGIS
 
 Supported types:
 - Well Known Text 
 - Spatialite Query
 - Well Known Binary
-- GeoJson 
+- GeoJSON
 
 Supported Geometries:
 - Point
@@ -76,4 +76,56 @@ Add it in your root build.gradle at the end of repositories:
 
 > **note:** Replace "TAG_NAME" by the project version e.g. "1.0.1"
 > **see**: JitPack [maven](https://jitpack.io/#maven) documentation
+
+
+# Usage
+
+## Object to string
+
+Create the object and serialize it to expected format:
+- WKT
+- GeoJSON
+- Spatial query
+
+``` java
+        Point<XY> p = new Point<>(new XY(6.1466014, 46.2017559));
+        
+        System.out.println(p.toString());
+        // POINT (6.45467 15.4578)
+        
+        System.out.println(p.toGeoJson());
+        // {"type": "Point", "coordinates": [6.45467, 15.4578]}
+        
+        System.out.println(p.toQuery(4326));
+        // ST_GeomFromText('POINT (6.45467 15.4578)', 4326)
+```
+
+## WKT to object
+
+Unserialize from WKT
+
+``` java
+        Point<XY> p = Point.unMarshall(XY.class, "POINT (6.45467 15.4578)");
+
+        System.out.println(p.toString());
+        // POINT (6.45467 15.4578)
+```
+
+## WKB to object
+
+Unserialize from WKB
+``` java
+        // Create binary point
+        byte[] BYTES = new byte[]{ // POINT (10.0, 10.0)
+            0x01, // 01 - Little-endian
+            0x01, 0x00, 0x00, 0x00, // POINT
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x24, 0x40, // 10.0
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x24, 0x40 // 10.0
+        };
+
+        Point<XY> p = (Point<XY>) Point.unMarshall(BYTES);
+        
+        System.out.println(p.toString());
+        // POINT (10 10)
+```
 

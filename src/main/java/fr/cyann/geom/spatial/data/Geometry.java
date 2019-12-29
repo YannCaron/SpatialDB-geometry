@@ -213,7 +213,7 @@ public abstract class Geometry<C extends XY> implements Marshallable, GeoJsonMar
         return string.toString();
     }
 
-    public String toSpatialiteQuery (int srid) throws BadGeometryException {
+    public String toQuery (int srid) throws BadGeometryException {
         StringBuilder string = new StringBuilder();
         string.append("ST_GeomFromText('");
         marshall(string);
@@ -221,7 +221,7 @@ public abstract class Geometry<C extends XY> implements Marshallable, GeoJsonMar
         return string.toString();
     }
     
-    public String toSpatialiteQuery () throws BadGeometryException {
-        return toSpatialiteQuery(GPS_SRID);
+    public String toQuery () throws BadGeometryException {
+        return Geometry.this.toQuery(GPS_SRID);
     }
 }
