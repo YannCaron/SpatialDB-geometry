@@ -45,7 +45,7 @@ Add it in your root build.gradle at the end of repositories:
 
 ```bash
 	dependencies {
-		implementation 'com.github.YannCaron:SpatialDB-geometry:<TAG_NAME>'
+		implementation 'com.github.YannCaron:spatialdb-geometry:<TAG_NAME>'
 	}
 ```
 > **note:** Replace <TAG_NAME> by the project version e.g. "1.0.2"
@@ -70,7 +70,7 @@ Add it in your root build.gradle at the end of repositories:
 ```xml
 	<dependency>
 	    <groupId>com.github.YannCaron</groupId>
-	    <artifactId>SpatialDB-geometry</artifactId>
+	    <artifactId>spatialdb-geometry</artifactId>
 	    <version>TAG_NAME</version>
 	</dependency>
 ```
