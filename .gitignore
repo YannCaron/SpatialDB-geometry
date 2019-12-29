@@ -22,7 +22,7 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
-# netbeans specific
+# netbeans / gradle specific
 nbproject/private/
 build/
 nbbuild/
@@ -30,3 +30,16 @@ dist/
 nbdist/
 .nb-gradle/
 .gradle/
+gradle/
+
+/*/nb-configuration.xml
+/nbproject/
+/*/nbproject/
+/*/target/
+/*/build/
+/netbeans-gradle-default-models/gradle-api/
+/.nb-gradle-properties
+
+# Directories left from old Ant project
+/build/
+/nbproject/private/
