@@ -30,7 +30,6 @@ dist/
 nbdist/
 .nb-gradle/
 .gradle/
-gradle/
 
 /*/nb-configuration.xml
 /nbproject/
@@ -39,3 +38,6 @@ gradle/
 /*/build/
 /netbeans-gradle-default-models/gradle-api/
 /.nb-gradle-properties
+
+# include gradle wrapper
+!gradle/wrapper/gradle-wrapper.jar
