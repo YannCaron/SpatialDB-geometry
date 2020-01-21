@@ -45,6 +45,7 @@ Add it in your root build.gradle at the end of repositories:
 
 ```bash
 	dependencies {
+		implementation 'com.github.sevar83:android-spatialite:2.0.1'
 		implementation 'com.github.YannCaron:spatialdb-geometry:<TAG_NAME>'
 	}
 ```
